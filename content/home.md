@@ -18,37 +18,37 @@
     </div>
   </div>
 </div>
+
 ## Navigate
 
 <div class="tilegrid">
   <a class="tile tile--a1" href="#publications">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">Publications</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Publications</span>
   </a>
   <a class="tile tile--live" href="#blog">
     <div class="tile__face tile__face--front">
       <svg class="tile__icon"><use href="#i-pen"/></svg>
-      <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">Blog</span>
+      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Blog</span>
     </div>
     <div class="tile__face tile__face--back">
-      <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">Latest Notes</span>
-      <span class="tile__sub" style="font-weight: bold; font-style: inherit; color: #ff6f61;">tap to read</span>
+      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Latest Notes</span>
+      <span class="tile__sub" style="font-weight: 900; font-size: 1.2rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">tap to read</span>
     </div>
   </a>
   <a class="tile tile--a3" href="#cv">
     <svg class="tile__icon"><use href="#i-doc"/></svg>
-    <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">CV</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">CV</span>
   </a>
   <a class="tile tile--a4" href="mailto:you@example.edu">
     <svg class="tile__icon"><use href="#i-mail"/></svg>
-    <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">Contact</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Contact</span>
   </a>
   <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
     <svg class="tile__icon"><use href="#i-globe"/></svg>
-    <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">Scholar</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Scholar</span>
   </a>
 </div>
-
 ## Research Interests
 
 - **Scientific machine learning** — physics-informed networks, neural operators, and uncertainty quantification
