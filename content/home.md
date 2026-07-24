@@ -23,30 +23,29 @@
 <div class="tilegrid">
   <a class="tile tile--a1" href="#publications">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label">Publications</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.75rem; overflow-wrap: break-word; font-style: inherit;">Publications</span>
   </a>
   <a class="tile tile--live" href="#blog">
     <div class="tile__face tile__face--front">
       <svg class="tile__icon"><use href="#i-pen"/></svg>
-      <span class="tile__label">Blog</span>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit;">Blog</span>
     </div>
     <div class="tile__face tile__face--back">
-      <!-- White text with heavy dark shadow for universal visibility -->
-      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1.4rem; text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1);">Latest Notes</span>
-      <span class="tile__sub" style="color: #FFFFFF; font-weight: 900; font-size: 1.1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1);">tap to read</span>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.85rem; font-style: inherit;">Latest Notes</span>
+      <span class="tile__sub" style="color: #FFFFFF; font-weight: 900; font-size: 0.7rem; font-style: inherit;">tap to read</span>
     </div>
   </a>
   <a class="tile tile--a3" href="#cv">
     <svg class="tile__icon"><use href="#i-doc"/></svg>
-    <span class="tile__label">CV</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit;">CV</span>
   </a>
   <a class="tile tile--a4" href="mailto:you@example.edu">
     <svg class="tile__icon"><use href="#i-mail"/></svg>
-    <span class="tile__label">Contact</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit;">Contact</span>
   </a>
   <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
     <svg class="tile__icon"><use href="#i-globe"/></svg>
-    <span class="tile__label">Scholar</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit;">Scholar</span>
   </a>
 </div>
 
