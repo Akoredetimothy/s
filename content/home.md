@@ -18,8 +18,8 @@
     </div>
   </div>
 </div>
-
 ## Navigate
+
 <div class="tilegrid">
   <a class="tile tile--a1" href="#publications">
     <svg class="tile__icon"><use href="#i-book"/></svg>
@@ -48,6 +48,7 @@
     <span class="tile__label" style="font-weight: bold; font-style: inherit; color: #ff6f61;">Scholar</span>
   </a>
 </div>
+
 ## Research Interests
 
 - **Scientific machine learning** — physics-informed networks, neural operators, and uncertainty quantification
