@@ -23,34 +23,56 @@
 <div class="tilegrid">
   <a class="tile tile--a1" href="#publications">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label" style="color:#FFFFFF; font-weight:900; font-size:0.75rem; font-style:inherit; overflow-wrap:break-word; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Publications</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.75rem; font-style: inherit; max-width: 100%; display: inline-block; overflow-wrap: break-word; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Publications</span>
   </a>
-
   <a class="tile tile--live" href="#blog">
     <div class="tile__face tile__face--front">
       <svg class="tile__icon"><use href="#i-pen"/></svg>
-      <span class="tile__label" style="color:#FFFFFF; font-weight:900; font-size:1rem; font-style:inherit; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Blog</span>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Blog</span>
     </div>
-
     <div class="tile__face tile__face--back">
-      <span class="tile__label" style="color:#FFFFFF; font-weight:900; font-size:0.85rem; font-style:inherit; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Latest Notes</span>
-      <span class="tile__sub" style="color:#FFFFFF; font-weight:900; font-size:0.7rem; font-style:inherit; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">tap to read</span>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.85rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #0 cleanest00, 1px 1px 0 #000;">Latest Notes</span>
+      <span class="tile__sub" style="color: #FFFFFF; font-weight: 900; font-size: 0.7rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.5px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">tap to read</span>
     </div>
   </a>
-
   <a class="tile tile--a3" href="#cv">
     <svg class="tile__icon"><use href="#i-doc"/></svg>
-    <span class="tile__label" style="color:#FFFFFF; font-weight:900; font-size:1rem; font-style:inherit; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CV</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1 text-shadow: 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CV</span>
   </a>
-
   <a class="tile tile--a4" href="mailto:you@example.edu">
     <svg class="tile__icon"><use href="#i-mail"/></svg>
-    <span class="tile__label" style="color:#FFFFFF; font-weight:900; font-size:1rem; font-style:inherit; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Contact</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1 tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Contact</span>
   </a>
-
   <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
     <svg class="tile__icon"><use href="#i-globe"/></svg>
-    <span class="tile__label" style="color:#FFFFFF; font-weight:900; font-size:1rem; font-style:inherit; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Scholar</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; - duplicate attributes and broken text-shadow values. Let me provide the clean, correct version:
+
+<div class="tilegrid">
+  <a class="tile tile--a1" href="#publications">
+    <svg class="tile__icon"><use href="#i-book"/></svg>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.75rem; font-style: inherit; max-width: 100%; display: inline-block; overflow-wrap: break-word; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Publications</span>
+  </a>
+  <a class="tile tile--live" href="#blog">
+    <div class="tile__face tile__face--front">
+      <svg class="tile__icon"><use href="#i-pen"/></svg>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Blog</span>
+    </div>
+    <div class="tile__face tile__face--back">
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.85rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Latest Notes</span>
+      <span class="tile__sub" style="color: #FFFFFF; font-weight: 900; font-size: 0.7rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.5px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">tap to read</span>
+    </div>
+  </a>
+  <a class="tile tile--a3" href="#cv">
+    <svg class="tile__icon"><use href="#i-doc"/></svg>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CV</span>
+  </a>
+  <a class="tile tile--a4" href="mailto:you@example.edu">
+    <svg class="tile__icon"><use href="#i-mail"/></svg>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Contact</span>
+  </a>
+  <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
+    <svg class="tile__icon"><use href="#i-globe"/></svg>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; max-width: 100%; display: inline-block; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Scholar</span>
   </a>
 </div>
 
