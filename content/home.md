@@ -23,29 +23,29 @@
 <div class="tilegrid">
   <a class="tile tile--a1" href="#publications">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.05rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Publications</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.75rem; font-style: inherit; overflow-wrap: break-word; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Publications</span>
   </a>
   <a class="tile tile--live" href="#blog">
     <div class="tile__face tile__face--front">
       <svg class="tile__icon"><use href="#i-pen"/></svg>
-      <span class="tile__label" style="font-weight: 900; font-size: 1.05rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Blog</span>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Blog</span>
     </div>
     <div class="tile__face tile__face--back">
-      <span class="tile__label" style="font-weight: 900; font-size: 0.9rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Latest Notes</span>
-      <span class="tile__sub" style="font-weight: 900; font-size: 0.75rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">tap to read</span>
+      <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 0.85rem; font-style: inherit; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Latest Notes</span>
+      <span class="tile__sub" style="color: #FFFFFF; font-weight: 900; font-size: 0.7rem; font-style: inherit; -webkit-text-stroke: 0.5px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">tap to read</span>
     </div>
   </a>
   <a class="tile tile--a3" href="#cv">
     <svg class="tile__icon"><use href="#i-doc"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.05rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">CV</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">CV</span>
   </a>
   <a class="tile tile--a4" href="mailto:you@example.edu">
     <svg class="tile__icon"><use href="#i-mail"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.05rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Contact</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Contact</span>
   </a>
   <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
     <svg class="tile__icon"><use href="#i-globe"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.05rem; font-style: inherit; color: #FFFFFF; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Scholar</span>
+    <span class="tile__label" style="color: #FFFFFF; font-weight: 900; font-size: 1rem; font-style: inherit; -webkit-text-stroke: 0.6px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Scholar</span>
   </a>
 </div>
 
