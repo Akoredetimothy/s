@@ -1,4 +1,4 @@
-# Your Name
+# Akorede Adetola
 
 <div class="about-panel">
   <div class="about-photo">
@@ -7,13 +7,13 @@
     <div class="about-photo__caption"><span>FIG.01</span><b>PORTRAIT</b></div>
   </div>
   <div class="about-body">
-    <p class="lead"><strong>Researcher in computational science</strong> working at the intersection of mathematical modelling, machine learning, and complex physical systems.</p>
-    <p>I develop data-driven and physics-informed methods for problems where experiments are expensive, dangerous, or impossible — and I care about making those methods reproducible, open, and useful to other people.</p>
-    <p>Previously: Postdoctoral Fellow at <em>Example Institute</em>. PhD at <em>Example University</em>. See the <a href="#cv">CV</a> for the full record.</p>
+    <p class="lead"><strong>Researching on the engineering fundamentals for the next kardashev climb </strong> working at the intersection of Intelligent Vision Systems and Automation.</p>
+    <p>I explore how to make current vision sytems use the inductive bias present in their world view.</p>
+    <p>Currently: ML Researcher <em>Sage Engineering Lab</em>.  Mechanical Engineering <em>Olabisi Onabanjo University</em>. See the <a href="#cv">CV</a> for the full record.</p>
     <div class="contact-strip">
-      <a class="btn btn--solid" href="mailto:you@example.edu"><svg><use href="#i-mail"/></svg> Email</a>
+      <a class="btn btn--solid" href="adetola11korede@proton.me"><svg><use href="#i-mail"/></svg> Email</a>
       <a class="btn btn--accent" href="https://scholar.google.com" target="_blank" rel="noopener">Scholar</a>
-      <a class="btn" href="https://github.com/yourusername" target="_blank" rel="noopener"><svg><use href="#i-code"/></svg> GitHub</a>
+      <a class="btn" href="https://github.com/Akoredetimothy" target="_blank" rel="noopener"><svg><use href="#i-code"/></svg> GitHub</a>
       <a class="btn" href="https://orcid.org" target="_blank" rel="noopener">ORCID</a>
     </div>
   </div>
@@ -22,7 +22,7 @@
 ## Navigate
 
 <div class="tilegrid">
-  <a class="tile tile--a1" href="#publications">
+  <a class="tile tile--a1" href=<strong>"#publications"</strong>>
     <svg class="tile__icon"><use href="#i-book"/></svg>
     <span class="tile__label">Publications</span>
   </a>
