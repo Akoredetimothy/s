@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<script>
+  // Restore theme before paint (avoids flash of wrong theme)
+  (function(){
+    try{
+      var t = localStorage.getItem('nf_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      var a = localStorage.getItem('nf_accent_' + t);
+      if(a){ document.documentElement.style.setProperty('--color-accent', a); }
+    }catch(e){}
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single&family=Quantico:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===================================================================
+   PERSONAL RESEARCH SITE — "N10 × NOKIAFLUX"
+   Dark Metro (N10) ╳ Light high-contrast (NokiaFlux) in one shell.
+   Hash router + markdown-driven content. Zero build step.
+   =================================================================== */
+
+/* ---------- RESET ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:var(--font-body);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;}
+::selection{background:var(--color-accent);color:var(--color-accent-ink);}
+
+/* ---------- DESIGN TOKENS ---------- */
+:root{
+  --color-bg:#000000;
+  --color-surface:#131313;
+  --color-surface-alt:#1c1c1c;
+  --color-border:#2a2a2a;
+  --color-border-strong:#3d3d3d;
+  --color-text:#ffffff;
+  --color-text-dim:#8c8c8c;
+  --color-text-faint:#595959;
+
+  --color-accent:#00A4EF;                 /* windows blue (default dark) */
+  --color-accent-ink:#000000;             /* text drawn on accent        */
+  --color-accent-glow:rgba(0,164,239,.30);
+  --color-accent-bg:rgba(0,164,239,.10);
+  --a2:#F25022; --a3:#7FBA00; --a4:#FFB900;
+
+  --font-heading:'Bitcount Single','Courier New',monospace;
+  --font-body:'Quantico',Arial,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+
+  --space-1:4px; --space-2:8px; --space-3:16px; --space-4:24px;
+  --space-5:32px; --space-6:48px; --space-7:64px;
+
+  --radius:0;                                 /* sharp Symbian edges     */
+  --t-fast:.18s ease;
+  --t-med:.35s cubic-bezier(.4,0,.2,1);
+
+  --grid-line:rgba(255,255,255,.028);
+}
+
+/* ---------- LIGHT THEME (NokiaFlux) ---------- */
+[data-theme="light"]{
+  --color-bg:#f4f6f9;
+  --color-surface:#ffffff;
+  --color-surface-alt:#eef1f5;
+  --color-border:#e1e1e1;
+  --color-border-strong:#c8cdd4;
+  --color-text:#000000;
+  --color-text-dim:#5a5a5a;
+  --color-text-faint:#9aa0a8;
+  --color-accent:#0078D4;                 /* win10 blue (default light)  */
+  --color-accent-ink:#ffffff;
+  --color-accent-glow:rgba(0,120,212,.22);
+  --color-accent-bg:rgba(0,120,212,.07);
+  --grid-line:rgba(0,0,0,.045);
+}
+
+/* ---------- BACKGROUND TEXTURE (metro blueprint grid) ---------- */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(var(--grid-line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+
+/* ---------- TYPOGRAPHY ---------- */
+h1,h2,h3,h4{
+  font-family:var(--font-heading);
+  font-weight:400;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  line-height:1.1;
+}
+h1{font-size:clamp(2rem,5vw,3.6rem);}
+h2{font-size:clamp(1.5rem,3.4vw,2.1rem);}
+h3{font-size:clamp(1.15rem,2.2vw,1.45rem);}
+h4{font-size:1rem;}
+p{color:var(--color-text-dim);max-width:68ch;}
+.eyebrow{
+  display:block;
+  font-family:var(--font-heading);
+  text-transform:uppercase;
+  letter-spacing:4px;
+  font-size:.75rem;
+  color:var(--color-accent);
+  margin-bottom:var(--space-2);
+}
+.section-note{color:var(--color-text-dim);font-size:.85rem;margin-bottom:var(--space-4);}
+.section-note::before{content:'// ';color:var(--color-accent);}
+
+/* ---------- LAYOUT ---------- */
+.container{width:100%;max-width:600px;margin-inline:auto;padding-inline:var(--space-3);}
+@media(min-width:600px){ .container{max-width:720px;padding-inline:var(--space-4);} }
+@media(min-width:1024px){ .container{max-width:960px;} }
+@media(min-width:1440px){ .container{max-width:1200px;padding-inline:var(--space-6);} }
+
+/* ---------- APP BAR ---------- */
+.appbar{
+  position:sticky;top:0;z-index:100;
+  background:color-mix(in srgb,var(--color-bg) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--color-border);
+}
+.appbar__inner{display:flex;align-items:center;gap:var(--space-3);padding:12px var(--space-3);}
+@media(min-width:600px){ .appbar__inner{padding-inline:var(--space-4);} }
+
+/* logo: mini live-tile that flips */
+.logo-tile{
+  width:40px;height:40px;flex-shrink:0;text-decoration:none;position:relative;perspective:300px;
+}
+.logo-tile .face{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-heading);font-size:.95rem;letter-spacing:1px;
+  background:var(--color-accent);color:var(--color-accent-ink);
+  transition:transform .5s ease;
+  backface-visibility:hidden;
+}
+.logo-tile .face--back{background:var(--color-text);color:var(--color-bg);transform:rotateY(180deg);}
+.logo-tile.flipped .face--front{transform:rotateY(180deg);}
+.logo-tile.flipped .face--back{transform:rotateY(360deg);}
+
+.appbar__name{display:flex;flex-direction:column;line-height:1.15;text-decoration:none;}
+.appbar__name .n{font-family:var(--font-heading);font-size:.95rem;text-transform:uppercase;letter-spacing:2px;color:var(--color-text);}
+.badge{
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--color-accent);
+}
+
+/* pivot nav (NokiaFlux underline + N10 glow) */
+.appbar__nav{display:none;gap:var(--space-5);margin-left:auto;}
+.appbar__nav a{
+  font-family:var(--font-heading);text-transform:uppercase;font-size:.85rem;
+  letter-spacing:1px;text-decoration:none;color:var(--color-text-dim);
+  position:relative;padding:6px 2px;
+  transition:color var(--t-fast),letter-spacing var(--t-fast),text-shadow var(--t-fast);
+}
+.appbar__nav a::after{
+  content:'';position:absolute;left:0;bottom:-2px;height:2px;width:0;
+  background:var(--color-accent);transition:width var(--t-med),box-shadow var(--t-med);
+}
+.appbar__nav a:hover{color:var(--color-text);text-shadow:0 0 12px var(--color-accent-glow);}
+.appbar__nav a:hover::after{width:100%;}
+.appbar__nav a.active{color:var(--color-text);text-shadow:0 0 12px var(--color-accent-glow);}
+.appbar__nav a.active::after{width:100%;box-shadow:0 0 10px var(--color-accent-glow);}
+@media(min-width:900px){ .appbar__nav{display:flex;} }
+
+.appbar__tools{display:flex;align-items:center;gap:var(--space-3);margin-left:auto;}
+@media(min-width:900px){ .appbar__tools{margin-left:0;} }
+
+/* status clock */
+.clock{
+  display:none;font-family:var(--font-mono);font-size:.75rem;letter-spacing:1px;
+  color:var(--color-text-dim);
+}
+.clock b{color:var(--color-accent);font-weight:500;}
+@media(min-width:600px){ .clock{display:block;} }
+
+/* icon buttons + hamburger */
+.icon-btn{
+  width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--color-border);color:var(--color-text-dim);
+  transition:color var(--t-fast),border-color var(--t-fast),box-shadow var(--t-med);
+}
+.icon-btn:hover{color:var(--color-accent);border-color:var(--color-accent);box-shadow:0 0 18px -4px var(--color-accent-glow);}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;}
+.hamburger{display:inline-flex;gap:8px;padding:4px;flex-direction:column;justify-content:center;align-items:center;}
+.hamburger span{width:20px;height:2px;background:var(--color-text);display:block;}
+@media(min-width:900px){ .hamburger{display:none;} }
+
+/* settings popover */
+.settings{
+  position:absolute;top:calc(100% + 1px);right:var(--space-3);z-index:120;
+  width:260px;background:var(--color-surface);border:1px solid var(--color-border);
+  border-top:2px solid var(--color-accent);padding:var(--space-4);
+  transform:translateY(-8px);opacity:0;pointer-events:none;
+  transition:transform var(--t-med),opacity var(--t-med);
+  box-shadow:0 24px 60px -24px rgba(0,0,0,.7);
+}
+.settings.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+.settings .eyebrow{margin-bottom:10px;}
+.settings .row{display:flex;gap:8px;margin-bottom:var(--space-3);}
+.settings .row:last-child{margin-bottom:0;}
+.theme-btn{
+  flex:1;padding:10px 0;border:2px solid var(--color-border-strong);
+  font-family:var(--font-heading);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--color-text-dim);transition:all var(--t-fast);
+}
+.theme-btn.active{border-color:var(--color-accent);color:var(--color-text);box-shadow:3px 3px 0 var(--color-accent);}
+.swatches{display:flex;gap:var(--space-3);flex-wrap:wrap;}
+.swatch{width:34px;height:34px;border:2px solid transparent;transition:transform var(--t-fast),border-color var(--t-fast);}
+.swatch:hover{transform:scale(1.15);}
+.swatch.active{border-color:var(--color-text);}
+
+/* ---------- MOBILE MENU ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;opacity:0;pointer-events:none;transition:opacity var(--t-med);}
+.scrim.open{opacity:1;pointer-events:auto;}
+.mobile-menu{
+  position:fixed;top:0;right:0;bottom:0;width:82%;max-width:340px;
+  background:var(--color-surface);border-left:1px solid var(--color-border);
+  transform:translateX(100%);transition:transform var(--t-med);
+  z-index:200;padding:var(--space-6) var(--space-4);
+  display:flex;flex-direction:column;
+}
+.mobile-menu a{
+  display:block;font-family:var(--font-heading);font-size:1.5rem;
+  text-transform:uppercase;color:var(--color-text);text-decoration:none;
+  padding:var(--space-3) 0;border-bottom:1px solid var(--color-border);
+  transition:color var(--t-fast),padding-left var(--t-fast);
+}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--color-accent);padding-left:10px;}
+.mobile-menu .mm-foot{margin-top:auto;font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;color:var(--color-text-faint);text-transform:uppercase;}
+.mobile-menu .mm-foot b{color:var(--color-accent);font-weight:500;}
+
+/* ---------- LOADER (indeterminate bar) ---------- */
+.loader{position:sticky;top:65px;z-index:90;height:3px;background:transparent;overflow:hidden;opacity:0;transition:opacity .15s;}
+.loader.on{opacity:1;background:var(--color-border);}
+.loader span{display:block;height:100%;width:35%;background:var(--color-accent);position:absolute;animation:indet 1.2s infinite;}
+@keyframes indet{0%{left:-35%;}100%{left:100%;}}
+@media(prefers-reduced-motion:reduce){ .loader span{animation:none;left:33%;} }
+
+/* ---------- PAGE HEAD (hero bleed) ---------- */
+.page-head{position:relative;padding:var(--space-6) 0 var(--space-4);overflow:hidden;}
+.page-head__bleed{
+  font-family:var(--font-heading);
+  font-size:clamp(3rem,14vw,8.5rem);
+  white-space:nowrap;color:transparent;
+  -webkit-text-stroke:1px var(--color-border);
+  letter-spacing:6px;position:absolute;top:-.35em;left:-.1em;z-index:0;
+  user-select:none;pointer-events:none;
+}
+[data-theme="light"] .page-head__bleed{-webkit-text-stroke:1px var(--color-border-strong);}
+.page-head__inner{position:relative;z-index:1;}
+.page-head h1{margin-bottom:6px;}
+.page-head h1 .cursor{color:var(--color-accent);animation:blink 1.1s steps(1) infinite;}
+@keyframes blink{50%{opacity:0;}}
+@media(prefers-reduced-motion:reduce){ .page-head h1 .cursor{animation:none;} }
+
+/* ---------- CONTENT AREA ---------- */
+main{min-height:60vh;}
+#content{padding-bottom:var(--space-7);animation:rise .45s ease both;}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){ #content{animation:none;} }
+
+/* ---------- PROSE (markdown) ---------- */
+.md h2{margin:2.2em 0 .6em;position:relative;padding-left:16px;}
+.md h2::before{content:'';position:absolute;left:0;top:.12em;bottom:.12em;width:4px;background:var(--color-accent);}
+.md h2:first-child{margin-top:0;}
+.md h3{margin:1.8em 0 .5em;color:var(--color-text);}
+.md h3::before{content:'› ';color:var(--color-accent);}
+.md h4{margin:1.4em 0 .4em;color:var(--color-text-dim);letter-spacing:2px;}
+.md p{margin-bottom:var(--space-3);}
+.md strong{color:var(--color-text);}
+.md em{color:var(--color-text);}
+.md a{color:var(--color-accent);text-decoration:none;position:relative;}
+.md a::after{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--color-accent);opacity:.45;transition:opacity var(--t-fast),box-shadow var(--t-fast);}
+.md a:hover{text-shadow:0 0 12px var(--color-accent-glow);}
+.md a:hover::after{opacity:1;box-shadow:0 0 8px var(--color-accent-glow);}
+.md ul,.md ol{margin:0 0 var(--space-3) 0;padding-left:0;list-style:none;color:var(--color-text-dim);}
+.md li{margin-bottom:8px;padding-left:22px;position:relative;max-width:68ch;}
+.md ul li::before{content:'';position:absolute;left:2px;top:.5em;width:7px;height:7px;background:var(--color-accent);}
+.md ol{counter-reset:oli;}
+.md ol li::before{counter-increment:oli;content:counter(oli,decimal-leading-zero);position:absolute;left:0;top:.1em;font-family:var(--font-mono);font-size:.8em;color:var(--color-accent);}
+.md hr{border:none;height:1px;background:var(--color-border);margin:var(--space-5) 0;position:relative;}
+.md hr::after{content:'';position:absolute;left:0;top:-2px;width:40px;height:5px;background:var(--color-accent);}
+.md blockquote{
+  border-left:4px solid var(--color-accent);padding:4px 0 4px var(--space-3);
+  margin:var(--space-4) 0;color:var(--color-text);font-size:1.05rem;
+  background:linear-gradient(90deg,var(--color-accent-bg),transparent);
+}
+.md blockquote p{color:var(--color-text);margin-bottom:6px;}
+.md blockquote p:last-child{margin-bottom:0;}
+.md code{font-family:var(--font-mono);font-size:.85em;background:var(--color-surface-alt);border:1px solid var(--color-border);padding:1px 6px;color:var(--color-accent);}
+.md pre{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  padding:var(--space-3) var(--space-4);overflow-x:auto;margin:var(--space-3) 0 var(--space-4);
+  position:relative;border-top:2px solid var(--color-accent);
+}
+.md pre code{background:none;border:none;padding:0;color:var(--color-text-dim);font-size:.82rem;line-height:1.7;}
+.md table{width:100%;border-collapse:collapse;margin:var(--space-3) 0 var(--space-4);font-size:.9rem;}
+.md th{font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-text-dim);text-align:left;padding:10px 12px;border-bottom:2px solid var(--color-accent);background:var(--color-surface-alt);}
+.md td{padding:10px 12px;border-bottom:1px solid var(--color-border);color:var(--color-text-dim);}
+.md tr:hover td{background:var(--color-accent-bg);}
+.md img{border:1px solid var(--color-border);margin:var(--space-3) 0;}
+
+/* ---------- ABOUT PANEL (picture) ---------- */
+.about-panel{
+  display:grid;gap:var(--space-4);grid-template-columns:1fr;
+  padding:var(--space-4);background:var(--color-surface);
+  border:1px solid var(--color-border);margin-bottom:var(--space-5);
+}
+@media(min-width:720px){ .about-panel{grid-template-columns:280px 1fr;} }
+.about-photo{
+  position:relative;background:var(--color-surface-alt);
+  border:1px solid var(--color-border);padding:12px;overflow:hidden;
+  max-width:320px;
+}
+.about-photo::before{
+  content:'';position:absolute;top:-2px;left:-2px;width:26px;height:26px;
+  border-top:3px solid var(--color-accent);border-left:3px solid var(--color-accent);z-index:2;
+}
+.about-photo::after{
+  content:'';position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;
+  border-bottom:3px solid var(--color-accent);border-right:3px solid var(--color-accent);z-index:2;
+}
+.about-photo img{
+  aspect-ratio:1/1;object-fit:cover;width:100%;margin:0;border:none;
+  filter:grayscale(.85) contrast(1.05);
+  transition:filter var(--t-med),transform var(--t-med);
+}
+.about-photo:hover img{filter:grayscale(0);transform:scale(1.02);}
+.about-photo .sweep{
+  position:absolute;top:0;left:-100%;width:100%;height:4px;background:var(--color-accent);
+  transition:left .45s ease;z-index:2;box-shadow:0 0 14px var(--color-accent);
+}
+.about-photo:hover .sweep{left:0;}
+.about-photo__caption{
+  margin-top:10px;font-family:var(--font-mono);font-size:.62rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--color-text-faint);display:flex;justify-content:space-between;
+}
+.about-photo__caption b{color:var(--color-accent);font-weight:500;}
+.about-body p{margin-bottom:var(--space-3);}
+.about-body .lead{font-size:1.12rem;color:var(--color-text);}
+.about-body .lead strong{color:var(--color-accent);}
+.contact-strip{display:flex;gap:10px;flex-wrap:wrap;margin-top:var(--space-3);}
+
+/* ---------- BUTTONS ---------- */
+.btn{
+  font-family:var(--font-heading);text-transform:uppercase;letter-spacing:1px;
+  font-size:.8rem;padding:12px 24px;border:2px solid var(--color-text);
+  background:transparent;color:var(--color-text);cursor:pointer;text-decoration:none;
+  position:relative;overflow:hidden;z-index:1;display:inline-flex;align-items:center;gap:8px;
+  transition:color var(--t-med);
+}
+.btn::before{
+  content:'';position:absolute;inset:0;background:var(--color-text);
+  transform:scaleX(0);transform-origin:left;transition:transform var(--t-med);z-index:-1;
+}
+.btn:hover{color:var(--color-bg);}
+.btn:hover::before{transform:scaleX(1);}
+.btn--accent{border-color:var(--color-accent);color:var(--color-accent);}
+.btn--accent::before{background:var(--color-accent);}
+.btn--accent:hover{color:var(--color-accent-ink);}
+.btn--solid{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-accent-ink);}
+.btn--solid::before{background:var(--color-text);}
+.btn--solid:hover{color:var(--color-bg);}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;}
+
+/* ---------- LIVE TILES ---------- */
+.tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:var(--space-2);margin-bottom:var(--space-5);}
+@media(min-width:600px){ .tilegrid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:var(--space-3);} }
+@media(min-width:1440px){ .tilegrid{grid-template-columns:repeat(auto-fill,minmax(136px,1fr));} }
+.tile{
+  aspect-ratio:1/1;background:var(--color-surface);border:1px solid var(--color-border);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  justify-content:space-between;padding:var(--space-3) var(--space-2);cursor:pointer;
+  text-decoration:none;color:var(--color-text);
+  transition:opacity var(--t-med),filter var(--t-med),transform var(--t-fast),box-shadow var(--t-med),border-color var(--t-fast);
+}
+.tile--wide{grid-column:span 2;aspect-ratio:auto;}
+.tile--a1{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-accent-ink);}
+.tile--a2{background:var(--a2);border-color:var(--a2);color:#fff;}
+.tile--a3{background:var(--a3);border-color:var(--a3);color:#000;}
+.tile--a4{background:var(--a4);border-color:var(--a4);color:#000;}
+.tile:hover{transform:scale(.96);border-color:var(--color-text);box-shadow:0 0 26px -6px var(--color-accent-glow);}
+.tile:active{transform:scale(.9);}
+.tilegrid:hover .tile:not(:hover){opacity:.4;filter:saturate(.4);}
+.tile__icon{width:26px;height:26px;stroke:currentColor;fill:none;transition:transform var(--t-med);}
+.tile:hover .tile__icon{transform:rotate(-8deg) scale(1.12);}
+.tile__label{font-family:var(--font-heading);text-transform:uppercase;font-size:.78rem;letter-spacing:.5px;}
+.tile__sub{font-family:var(--font-mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;opacity:.75;}
+.tile--live .tile__face{position:absolute;inset:0;padding:var(--space-3) var(--space-2);display:flex;flex-direction:column;justify-content:space-between;transition:opacity .6s ease,transform .6s ease;}
+.tile--live .tile__face--back{opacity:0;transform:translateY(10px);}
+.tile--live.flipped .tile__face--front{opacity:0;transform:translateY(-10px);}
+.tile--live.flipped .tile__face--back{opacity:1;transform:translateY(0);}
+@media(prefers-reduced-motion:reduce){ .tile--live .tile__face{transition:none;} .tile:hover{transform:none;} }
+
+/* ---------- SPOTLIGHT LIST ---------- */
+.list{list-style:none;margin-bottom:var(--space-5);}
+.list-item{
+  display:flex;align-items:center;gap:16px;padding:16px 8px;
+  border-bottom:1px solid var(--color-border);text-decoration:none;color:var(--color-text);
+  position:relative;transition:opacity var(--t-med),padding-left var(--t-fast),background var(--t-fast);
+}
+.list:hover .list-item:not(:hover){opacity:.35;}
+.list-item:hover{padding-left:18px;background:linear-gradient(90deg,var(--color-accent-bg),transparent);}
+.list-item:hover .list-item__title{color:var(--color-accent);text-shadow:0 0 10px var(--color-accent-glow);}
+.list-item__icon{width:22px;height:22px;flex-shrink:0;stroke:currentColor;fill:none;}
+.list-item__title{font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.5px;font-size:.95rem;transition:color var(--t-fast),text-shadow var(--t-fast);}
+.list-item__desc{font-size:.82rem;color:var(--color-text-dim);}
+.list-item__chevron{margin-left:auto;width:16px;height:16px;opacity:.5;flex-shrink:0;stroke:currentColor;fill:none;transition:transform var(--t-fast);}
+.list-item:hover .list-item__chevron{transform:translateX(4px);opacity:1;}
+
+/* ---------- CHIPS ---------- */
+.chip{
+  display:inline-block;font-family:var(--font-mono);font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;
+  border:1px solid var(--color-border-strong);color:var(--color-text-dim);padding:4px 10px;
+  transition:all var(--t-fast);
+}
+.chip:hover{border-color:var(--color-accent);color:var(--color-accent);}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--space-4);}
+
+/* ---------- BOXES ---------- */
+.box{
+  border:1px solid var(--color-border);background:var(--color-surface);
+  padding:var(--space-4);margin-bottom:var(--space-4);
+  position:relative;overflow:hidden;
+  transition:border-color var(--t-fast),box-shadow var(--t-med),transform var(--t-fast);
+}
+.box::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:4px;background:var(--color-accent);transition:left .4s ease;}
+.box:hover::before{left:0;}
+.box:hover{border-color:var(--color-accent);box-shadow:0 0 40px -14px var(--color-accent-glow);transform:translateY(-3px);}
+.box h3{margin-bottom:var(--space-2);}
+.box--alert{border-left:4px solid var(--a2);}
+.grid-2,.grid-3{display:grid;gap:var(--space-4);grid-template-columns:1fr;}
+@media(min-width:720px){ .grid-2{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(3,1fr);} }
+@media(min-width:1024px){ .grid-3{grid-template-columns:repeat(3,1fr);} }
+
+/* ---------- PUBLICATIONS ---------- */
+.pub-list{counter-reset:pub;margin-bottom:var(--space-5);}
+.pub-entry{
+  position:relative;background:var(--color-surface);border:1px solid var(--color-border);
+  padding:var(--space-4) var(--space-4) var(--space-3) 58px;margin-bottom:var(--space-3);
+  counter-increment:pub;overflow:hidden;
+  transition:border-color var(--t-fast),box-shadow var(--t-med),transform var(--t-fast);
+}
+.pub-entry::before{
+  content:counter(pub,decimal-leading-zero);
+  position:absolute;left:16px;top:18px;
+  font-family:var(--font-mono);font-size:.8rem;color:var(--color-accent);
+}
+.pub-entry::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:3px;background:var(--color-accent);transition:left .4s ease;}
+.pub-entry:hover::after{left:0;}
+.pub-entry:hover{border-color:var(--color-accent);transform:translateX(6px);box-shadow:-6px 0 0 -2px var(--color-accent),0 0 30px -10px var(--color-accent-glow);}
+.pub-title{font-weight:700;font-size:1.02rem;color:var(--color-text);line-height:1.4;}
+.pub-meta{font-size:.85rem;color:var(--color-text-dim);margin-top:6px;}
+.pub-meta strong{color:var(--color-accent);font-weight:700;}
+.pub-venue{font-family:var(--font-mono);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--color-text-faint);margin-top:6px;}
+.pub-links{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.pub-links a{font-family:var(--font-mono);font-size:.66rem;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--color-border-strong);color:var(--color-text-dim);padding:5px 12px;text-decoration:none;transition:all var(--t-fast);}
+.pub-links a:hover{border-color:var(--color-accent);color:var(--color-accent);background:var(--color-accent-bg);}
+.pub-links a::after{display:none;}
+
+/* ---------- CV ---------- */
+.cv-entry{
+  border:1px solid var(--color-border);background:var(--color-surface);
+  padding:var(--space-4);margin-bottom:var(--space-3);
+  transition:border-color var(--t-fast),box-shadow var(--t-med);
+}
+.cv-entry:hover{border-color:var(--color-accent);box-shadow:0 0 30px -12px var(--color-accent-glow);}
+.cv-entry-header{display:flex;justify-content:space-between;gap:var(--space-3);align-items:flex-start;flex-wrap:wrap;}
+.cv-entry-title{font-family:var(--font-heading);text-transform:uppercase;letter-spacing:1px;font-size:.95rem;color:var(--color-text);}
+.cv-entry-subtitle{font-size:.85rem;color:var(--color-text-dim);margin-top:4px;}
+.cv-entry-date{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--color-accent);border:1px solid var(--color-border-strong);padding:4px 10px;white-space:nowrap;flex-shrink:0;
+}
+.cv-entry:hover .cv-entry-date{border-color:var(--color-accent);}
+.cv-entry-details{font-size:.9rem;color:var(--color-text-dim);margin-top:10px;max-width:72ch;}
+.cv-entry-details ul{margin-top:6px;}
+.cv-section{margin-bottom:var(--space-3);}
+
+/* ---------- BLOG LISTING ---------- */
+.post-list{margin-bottom:var(--space-5);}
+.post-row{
+  display:flex;gap:var(--space-3);align-items:stretch;text-decoration:none;
+  background:var(--color-surface);border:1px solid var(--color-border);
+  margin-bottom:var(--space-3);overflow:hidden;position:relative;
+  transition:opacity var(--t-med),border-color var(--t-fast),transform var(--t-fast),box-shadow var(--t-med);
+}
+.post-list:hover .post-row:not(:hover){opacity:.4;}
+.post-row:hover{border-color:var(--color-accent);transform:translateX(6px);box-shadow:-6px 0 0 -2px var(--color-accent),0 0 30px -10px var(--color-accent-glow);}
+.post-row__date{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--color-accent-ink);background:var(--color-accent);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:var(--space-3) 12px;text-align:center;min-width:76px;flex-shrink:0;line-height:1.5;
+}
+.post-row__date .y{opacity:.8;font-size:.6rem;}
+.post-row__date.is-empty{color:var(--color-text-faint);background:var(--color-surface-alt);}
+.post-row__main{padding:var(--space-3) var(--space-3) var(--space-3) 0;min-width:0;}
+.post-row__title{font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.5px;font-size:.98rem;color:var(--color-text);margin-bottom:6px;}
+.post-row__excerpt{font-size:.85rem;color:var(--color-text-dim);max-width:72ch;}
+.post-row__tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.post-row__chev{width:16px;height:16px;stroke:var(--color-text-dim);fill:none;flex-shrink:0;align-self:center;margin-right:var(--space-3);transition:transform var(--t-fast),stroke var(--t-fast);}
+.post-row:hover .post-row__chev{transform:translateX(4px);stroke:var(--color-accent);}
+
+/* ---------- BLOG POST META ---------- */
+.post-meta{display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap;margin-bottom:var(--space-4);}
+.meta-chip{font-family:var(--font-mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--color-text-dim);}
+.meta-chip b{color:var(--color-accent);font-weight:500;}
+.post-nav{display:flex;justify-content:space-between;gap:var(--space-3);margin-top:var(--space-6);flex-wrap:wrap;}
+
+/* ---------- TOAST ---------- */
+.toast{
+  position:fixed;top:-100px;left:50%;transform:translateX(-50%);
+  background:var(--color-accent);color:var(--color-accent-ink);padding:12px 26px;
+  font-family:var(--font-heading);text-transform:uppercase;letter-spacing:2px;font-size:.75rem;
+  z-index:400;transition:top var(--t-med);
+}
+.toast.show{top:20px;}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--color-border);padding:var(--space-5) 0 var(--space-4);}
+.foot-inner{display:flex;flex-direction:column;gap:var(--space-3);align-items:center;text-align:center;}
+@media(min-width:720px){ .foot-inner{flex-direction:row;justify-content:space-between;text-align:left;} }
+.foot-brand{display:flex;align-items:center;gap:12px;}
+.foot-mark{width:26px;height:26px;background:var(--color-accent);color:var(--color-accent-ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:.6rem;}
+footer p{margin:0;font-size:.8rem;}
+.foot-mono{font-family:var(--font-mono);font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-text-faint);}
+.foot-mono b{color:var(--color-accent);font-weight:500;}
+</style>
+</head>
+<body>
+
+<!-- ============== ICON SPRITE (Nokia/Symbian stroke glyphs) ============== -->
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v10h12V10" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" fill="none" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 19V5M19 15H6" fill="none" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M14 5l5 5L8 21H3v-5z" fill="none" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 7l5 5" fill="none" stroke-width="1.5"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6z" fill="none" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v5h5M9 12h6M9 16h6" fill="none" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" fill="none" stroke-width="1.5"/><path d="M3 6l9 7 9-7" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="1.5"/><path d="M3 12h18M12 3c3 4 3 14 0 18M12 3c-3 4-3 14 0 18" fill="none" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6M13 4l-2 16" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 3h4M11 3v5L5 19a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 19L13 8V3" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 14h9" fill="none" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5" fill="none" stroke-width="1.5" stroke-linecap="round"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5" fill="none" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke-width="1.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" fill="none" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.5 6 6.5.5-5 4.5 1.5 6.5-5.5-3.5L6.5 21 8 14.5 3 10l6.5-.5z" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============== APP BAR ============== -->
+<header class="appbar">
+  <div class="appbar__inner container">
+    <a href="#home" class="logo-tile" id="logoTile" aria-label="Home">
+      <span class="face face--front mark">YN</span>
+      <span class="face face--back">✳</span>
+    </a>
+    <a href="#home" class="appbar__name">
+      <span class="n name">Your Name</span>
+      <span class="badge">Research</span>
+    </a>
+    <nav class="appbar__nav" id="pivotNav">
+      <a href="#home" data-route="home" class="active">About</a>
+      <a href="#publications" data-route="publications">Publications</a>
+      <a href="#blog" data-route="blog">Blog</a>
+      <a href="#cv" data-route="cv">CV</a>
+    </nav>
+    <div class="appbar__tools">
+      <span class="clock" id="clock">--:--:--</span>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings"><svg><use href="#i-settings"/></svg></button>
+      <button class="icon-btn hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="settings" id="settingsPanel">
+    <span class="eyebrow">Theme</span>
+    <div class="row">
+      <button class="theme-btn" data-theme-choice="dark">Dark</button>
+      <button class="theme-btn" data-theme-choice="light">Light</button>
+    </div>
+    <span class="eyebrow">Accent</span>
+    <div class="row swatches">
+      <button class="swatch" style="background:#00A4EF" data-accent="#00A4EF" aria-label="Blue"></button>
+      <button class="swatch" style="background:#F25022" data-accent="#F25022" aria-label="Red"></button>
+      <button class="swatch" style="background:#7FBA00" data-accent="#7FBA00" aria-label="Green"></button>
+      <button class="swatch" style="background:#FFB900" data-accent="#FFB900" aria-label="Yellow"></button>
+      <button class="swatch" style="background:#8b5cf6" data-accent="#8b5cf6" aria-label="Violet"></button>
+      <button class="swatch" style="background:#f43f5e" data-accent="#f43f5e" aria-label="Rose"></button>
+    </div>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="#home" data-route="home" class="active">About</a>
+  <a href="#publications" data-route="publications">Publications</a>
+  <a href="#blog" data-route="blog">Blog</a>
+  <a href="#cv" data-route="cv">CV</a>
+  <div class="mm-foot">SYS <b>ONLINE</b> · <span id="mmClock">--:--</span></div>
+</nav>
+
+<div class="loader" id="loader"><span></span></div>
+
+<main>
+  <!-- Page head (generated per route) -->
+  <section class="page-head">
+    <div class="page-head__bleed" id="pageBleed">ABOUT</div>
+    <div class="container page-head__inner">
+      <span class="eyebrow" id="pageEyebrow">01 / ABOUT</span>
+      <h1><span id="pageTitle">Your Name</span><span class="cursor">_</span></h1>
+      <p class="section-note" id="pageNote">profile and research interests</p>
+    </div>
+  </section>
+  <!-- Markdown renders here -->
+  <div class="container md" id="content"></div>
+</main>
+
+<footer>
+  <div class="container foot-inner">
+    <div class="foot-brand">
+      <span class="foot-mark mark">YN</span>
+      <p>© <span id="year">2026</span> <span class="name">Your Name</span>. All rights reserved.</p>
+    </div>
+    <span class="foot-mono">N10 × NOKIAFLUX · <b>MARKDOWN DRIVEN</b> · NO BUILD STEP</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+/* ===================================================================
+   SITE ENGINE — hash router + markdown loader + blog auto-discovery
+   =================================================================== */
+
+/* ---- IDENTITY & REPO CONFIG --------------------------------------
+   owner / repo are usually left blank: on GitHub Pages they are
+   auto-detected from the URL (username.github.io/repo/...).
+   Set them manually ONLY if you use a custom domain.              */
+const SITE = {
+  owner: '',        // e.g. 'janesmith' — leave '' to auto-detect
+  repo:  '',        // e.g. 'janesmith.github.io' — '' auto-detect
+  branch: 'main',
+  blogDir: 'blog',
+};
+
+const ROUTES = {
+  home:         { file:'content/home.md',         bleed:'ABOUT',    eyebrow:'01 / ABOUT',        note:'profile and research interests',       title:'' },
+  publications: { file:'content/publications.md', bleed:'PAPERS',   eyebrow:'02 / PUBLICATIONS', note:'papers, preprints and talks',          title:'Publications' },
+  blog:         { file:null,                      bleed:'NOTES',    eyebrow:'03 / BLOG',         note:'research notebook — auto-indexed',     title:'Blog' },
+  cv:           { file:'content/cv.md',           bleed:'RECORD',   eyebrow:'04 / CV',           note:'education, experience and service',    title:'Curriculum Vitae' },
+};
+
+const loader   = document.getElementById('loader');
+const content  = document.getElementById('content');
+const elBleed  = document.getElementById('pageBleed');
+const elBrow   = document.getElementById('pageEyebrow');
+const elTitle  = document.getElementById('pageTitle');
+const elNote   = document.getElementById('pageNote');
+
+/* ---------- small helpers ---------- */
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const pad = n => String(n).padStart(2,'0');
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._to); t._to = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function showLoader(on){ loader.classList.toggle('on', !!on); }
+
+function parseMD(md){ return (window.marked) ? marked.parse(md, {gfm:true, breaks:false}) : '<pre>'+esc(md)+'</pre>'; }
+
+/* pull the first top-level "# Heading" out of markdown */
+function extractH1(md){
+  const lines = md.split('\n'); let title = ''; let inCode = false;
+  for(let i=0;i<lines.length;i++){
+    const l = lines[i];
+    if(l.trim().startsWith('```')) inCode = !inCode;
+    if(!inCode && /^#\s+/.test(l)){ title = l.replace(/^#\s+/,'').trim(); lines.splice(i,1); break; }
+  }
+  return { title, md: lines.join('\n') };
+}
+
+/* tiny YAML-ish front matter parser:  ---\nkey: value\n--- */
+function parseFrontMatter(text){
+  const m = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n?/);
+  if(!m) return { data:{}, body:text };
+  const data = {};
+  m[1].split(/\r?\n/).forEach(line=>{
+    const kv = line.match(/^([A-Za-z_-]+)\s*:\s*(.*)$/);
+    if(kv) data[kv[1].toLowerCase()] = kv[2].trim().replace(/^["']|["']$/g,'');
+  });
+  return { data, body:text.slice(m[0].length) };
+}
+
+function fmtDate(iso){
+  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(iso) ? iso+'T00:00:00' : iso);
+  if(isNaN(d)) return null;
+  return { d, m:d.toLocaleString('en',{month:'short'}).toUpperCase(), day:pad(d.getDate()), y:d.getFullYear(),
+           long:d.toLocaleString('en',{month:'long',day:'numeric',year:'numeric'}) };
+}
+function readingTime(md){
+  const words = md.replace(/[#>*`\-|[\]()]/g,' ').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words/180));
+}
+function firstExcerpt(md){
+  for(const l of md.split('\n')){
+    const t = l.trim();
+    if(!t || t.startsWith('#') || t.startsWith('---') || t.startsWith('<') || t.startsWith('![') || /^[-*_]{3,}$/.test(t)) continue;
+    return esc(t.replace(/[#>*`|[\]']/g,'').replace(/\(([^)]+)\)/g,'').slice(0,150));
+  }
+  return '';
+}
+
+async function fetchText(url){
+  const res = await fetch(url, {cache:'no-cache'});
+  if(!res.ok) throw new Error('HTTP '+res.status+' for '+url);
+  return res.text();
+}
+
+function setHead(routeKey, title){
+  const r = ROUTES[routeKey];
+  elBleed.textContent  = r ? r.bleed   : 'ENTRY';
+  elBrow.textContent   = r ? r.eyebrow : '03 / BLOG';
+  elTitle.textContent  = title || (r && r.title) || 'Untitled';
+  elNote.textContent   = r ? r.note    : '';
+  document.title = (title || (r && r.title) || 'Your Name') + ' — Research';
+}
+
+function setActiveNav(routeKey){
+  document.querySelectorAll('[data-route]').forEach(a=>{
+    a.classList.toggle('active', a.dataset.route === routeKey);
+  });
+}
+
+/* ---------- standard markdown pages (home / publications / cv) ---------- */
+async function renderPage(key){
+  const r = ROUTES[key];
+  setActiveNav(key); setHead(key, r.title); showLoader(true);
+  try{
+    const raw = await fetchText(r.file);
+    const { title, md } = extractH1(raw);
+    if(title) setHead(key, key === 'home' ? title : (r.title || title));
+    content.innerHTML = parseMD(md);
+  }catch(err){
+    renderError(key, err);
+  }
+  showLoader(false); window.scrollTo({top:0});
+}
+
+function renderError(where, err){
+  content.innerHTML = `
+    <div class="box box--alert">
+      <span class="eyebrow" style="color:var(--a2)">// LOAD FAILURE</span>
+      <h3>Could not load content</h3>
+      <p>${esc(String(err))}</p>
+      <p style="margin-top:12px">If you opened this file directly (<code>file://</code>), the browser blocks
+      markdown loading. Run a local server instead:</p>
+      <pre><code>python3 -m http.server 8080
+# then visit http://localhost:8080</code></pre>
+      <a class="btn btn--accent" href="#${where}">Retry</a>
+    </div>`;
+}
+
+/* ===================================================================
+   BLOG — auto-discovers every .md file in blog/ via the GitHub API.
+   Drop a file into blog/, push, and it appears here automatically.
+   Falls back to the manual listing in content/blog.md when the API
+   is unreachable (local testing, rate limits, custom domain unset).
+   =================================================================== */
+
+function detectRepo(){
+  if(SITE.owner && SITE.repo) return {owner:SITE.owner, repo:SITE.repo};
+  const host = location.hostname;
+  if(host.endsWith('.github.io')){
+    const owner = host.split('.')[0];
+    const segs = location.pathname.split('/').filter(Boolean);
+    // if the site is served from a project page, first segment is the repo
+    const repo = segs.length ? segs[0] : owner + '.github.io';
+    return {owner, repo};
+  }
+  if(SITE.owner && SITE.repo) return {owner:SITE.owner, repo:SITE.repo};
+  return null; // localhost / custom domain without config → manual fallback
+}
+function rawURL(slug){ return SITE.blogDir + '/' + encodeURIComponent(slug) + '.md'; }
+
+const POSTS_CACHE_KEY = 'nf_posts_v1';
+const POSTS_TTL = 5*60*1000;
+
+async function discoverPosts(){
+  const repo = detectRepo();
+  if(!repo) return null;
+  try{
+    const cached = JSON.parse(sessionStorage.getItem(POSTS_CACHE_KEY) || 'null');
+    if(cached && (Date.now() - cached.ts) < POSTS_TTL) return cached.posts;
+  }catch(e){}
+  const api = `https://api.github.com/repos/${repo.owner}/${repo.repo}/contents/${SITE.blogDir}?ref=${SITE.branch}`;
+  const res = await fetch(api, {headers:{'Accept':'application/vnd.github+json'}});
+  if(!res.ok) return null;
+  const files = (await res.json()).filter(f => f.type === 'file' && f.name.toLowerCase().endsWith('.md'));
+  const posts = await Promise.all(files.map(async f => {
+    const slug = f.name.replace(/\.md$/i,'');
+    try{
+      const raw = await fetchText(SITE.blogDir + '/' + encodeURIComponent(f.name));
+      const {data, body} = parseFrontMatter(raw);
+      const {title, md} = extractH1(body);
+      return { slug, title: data.title || title || slug,
+               date: data.date || '', tags: data.tags ? data.tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
+               excerpt: data.excerpt || firstExcerpt(md) };
+    }catch(e){ return {slug, title:slug, date:'', tags:[], excerpt:''}; }
+  }));
+  try{ sessionStorage.setItem(POSTS_CACHE_KEY, JSON.stringify({ts:Date.now(), posts})); }catch(e){}
+  return posts;
+}
+
+async function manualPostList(){
+  const raw = await fetchText('content/blog.md');
+  const posts = [];
+  const re = /[-*]\s+\[([^\]]+)\]\(#blog\/([A-Za-z0-9._-]+)\)\s*[—–-]\s*(.+)/g;
+  let m; while((m = re.exec(raw))) posts.push({title:m[1], slug:m[2], date:m[3], tags:[], excerpt:''});
+  return posts;
+}
+
+function sortPosts(posts){
+  return posts.slice().sort((a,b)=>{
+    const da = fmtDate(a.date), db = fmtDate(b.date);
+    if(da && db) return db.d - da.d;
+    if(da) return -1; if(db) return 1;
+    return a.title.localeCompare(b.title);
+  });
+}
+
+async function renderBlogIndex(){
+  setActiveNav('blog'); setHead('blog', 'Blog'); showLoader(true);
+  let posts = null, auto = true;
+  posts = await discoverPosts();
+  if(!posts){ auto = false; try{ posts = await manualPostList(); }catch(e){ posts = []; } }
+  posts = sortPosts(posts);
+
+  elNote.textContent = posts.length
+    ? `${pad(posts.length)} entries indexed ${auto ? '// auto-discovered from /blog' : '// manual listing'}`
+    : 'no entries found yet';
+
+  if(!posts.length){
+    content.innerHTML = `<div class="box"><span class="eyebrow">// EMPTY</span>
+      <h3>No posts yet</h3>
+      <p>Drop a markdown file into <code>${SITE.blogDir}/</code> and it will appear here automatically.</p></div>`;
+  }else{
+    content.innerHTML = '<div class="post-list">' + posts.map(p=>{
+      const d = fmtDate(p.date);
+      return `<a class="post-row" href="#blog/${encodeURIComponent(p.slug)}">
+        <div class="post-row__date${d?'':' is-empty'}">${d ? `<span>${d.m}</span><span style="font-size:1.05rem">${d.day}</span><span class="y">${d.y}</span>` : `<span>—</span>`}</div>
+        <div class="post-row__main">
+          <div class="post-row__title">${esc(p.title)}</div>
+          ${p.excerpt ? `<div class="post-row__excerpt">${p.excerpt}${p.excerpt.length >= 148 ? '…' : ''}</div>` : ''}
+          ${p.tags && p.tags.length ? `<div class="post-row__tags">${p.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
+        </div>
+        <svg class="post-row__chev"><use href="#i-chevron"/></svg>
+      </a>`;
+    }).join('') + '</div>';
+  }
+  showLoader(false); window.scrollTo({top:0});
+}
+
+async function renderPost(slug){
+  setActiveNav('blog');
+  setHead('blog', 'Blog'); elBrow.textContent = '03 / BLOG · ENTRY'; elBleed.textContent = 'NOTES';
+  showLoader(true);
+  try{
+    const raw = await fetchText(rawURL(slug));
+    const {data, body} = parseFrontMatter(raw);
+    const {title, md} = extractH1(body);
+    const finalTitle = data.title || title || slug;
+    setHead('blog', finalTitle);
+    elBrow.textContent = '03 / BLOG · ENTRY';
+    const d = data.date ? fmtDate(data.date) : null;
+    const meta = [];
+    if(d) meta.push(`<span class="meta-chip">DATE <b>${d.long.toUpperCase()}</b></span>`);
+    meta.push(`<span class="meta-chip">READ <b>${readingTime(md)} MIN</b></span>`);
+    (data.tags ? data.tags.split(',').map(t=>t.trim()).filter(Boolean) : []).forEach(t=>meta.push(`<span class="chip">${esc(t)}</span>`));
+    content.innerHTML = `
+      <div class="post-meta">${meta.join('')}</div>
+      ${parseMD(md)}
+      <div class="post-nav">
+        <a class="btn btn--accent" href="#blog"><svg><use href="#i-back"/></svg> All Posts</a>
+        <a class="btn" href="#publications">Publications <svg><use href="#i-chevron"/></svg></a>
+      </div>`;
+  }catch(err){
+    renderError('blog', err);
+  }
+  showLoader(false); window.scrollTo({top:0});
+}
+
+/* ===================================================================
+   ROUTER
+   =================================================================== */
+function route(){
+  const hash = (location.hash || '#home').slice(1);
+  if(hash.startsWith('blog/')){
+    const slug = decodeURIComponent(hash.slice(5).replace(/\/+$/,''));
+    if(slug) return renderPost(slug);
+  }
+  if(ROUTES[hash] && hash === 'blog') return renderBlogIndex();
+  if(ROUTES[hash]) return renderPage(hash);
+  return renderPage('home');
+}
+window.addEventListener('hashchange', route);
+
+/* ===================================================================
+   UI CHROME
+   =================================================================== */
+
+/* mobile menu */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const scrim = document.getElementById('scrim');
+function toggleMenu(open){
+  mobileMenu.classList.toggle('open', open);
+  scrim.classList.toggle('open', open);
+}
+hamburgerBtn.addEventListener('click', ()=> toggleMenu(!mobileMenu.classList.contains('open')));
+scrim.addEventListener('click', ()=> toggleMenu(false));
+mobileMenu.querySelectorAll('a[data-route]').forEach(a=>a.addEventListener('click', ()=> toggleMenu(false)));
+
+/* settings popover */
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsPanel = document.getElementById('settingsPanel');
+settingsBtn.addEventListener('click', e=>{
+  e.stopPropagation();
+  settingsPanel.classList.toggle('open');
+});
+document.addEventListener('click', e=>{
+  if(settingsPanel.classList.contains('open') && !settingsPanel.contains(e.target))
+    settingsPanel.classList.remove('open');
+});
+
+/* theme + accent */
+const DEFAULT_ACCENT = { dark:'#00A4EF', light:'#0078D4' };
+function hexToRgb(h){
+  h = h.replace('#','');
+  if(h.length === 3) h = h.split('').map(c=>c+c).join('');
+  const n = parseInt(h,16);
+  return {r:(n>>16)&255, g:(n>>8)&255, b:n&255};
+}
+function applyTheme(theme, accent){
+  document.documentElement.setAttribute('data-theme', theme);
+  const a = accent || localStorage.getItem('nf_accent_'+theme) || DEFAULT_ACCENT[theme];
+  setAccent(a, false);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active', b.dataset.themeChoice === theme));
+  try{ localStorage.setItem('nf_theme', theme); }catch(e){}
+}
+function setAccent(hex, persist = true){
+  const {r,g,b} = hexToRgb(hex);
+  const root = document.documentElement;
+  root.style.setProperty('--color-accent', hex);
+  root.style.setProperty('--color-accent-glow', `rgba(${r},${g},${b},.30)`);
+  root.style.setProperty('--color-accent-bg', `rgba(${r},${g},${b},.10)`);
+  root.style.setProperty('--color-accent-ink', (0.299*r + 0.587*g + 0.114*b) > 150 ? '#000' : '#fff');
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active', s.dataset.accent.toLowerCase() === hex.toLowerCase()));
+  if(persist){
+    const theme = document.documentElement.getAttribute('data-theme');
+    try{ localStorage.setItem('nf_accent_'+theme, hex); }catch(e){}
+  }
+}
+document.querySelectorAll('.theme-btn').forEach(b=>b.addEventListener('click', ()=>applyTheme(b.dataset.themeChoice)));
+document.querySelectorAll('.swatch').forEach(s=>s.addEventListener('click', ()=>{ setAccent(s.dataset.accent); toast('ACCENT SET'); }));
+
+/* clocks */
+function tick(){
+  const d = new Date();
+  const t = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  const c = document.getElementById('clock');
+  c.innerHTML = esc(t).replace(/:/g,'<b>:</b>');
+  document.getElementById('mmClock').textContent = pad(d.getHours())+':'+pad(d.getMinutes());
+}
+setInterval(tick, 1000); tick();
+
+/* live-tile flipping (logo + any .tile--live in the content) */
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  setInterval(()=>{
+    document.getElementById('logoTile').classList.toggle('flipped');
+    document.querySelectorAll('.tile--live').forEach((t,i)=>{
+      setTimeout(()=>t.classList.toggle('flipped'), i*220);
+    });
+  }, 4000);
+}
+
+/* footer year */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* boot */
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+route();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <rect width="600" height="600" fill="#131313"/>
+  <g stroke="#00A4EF" stroke-width="6" fill="none">
+    <path d="M20 70 V20 H70"/>
+    <path d="M530 580 H580 V530"/>
+  </g>
+  <g stroke="#2a2a2a" stroke-width="3" fill="none">
+    <path d="M580 530 V580 H530" opacity="0"/>
+  </g>
+  <circle cx="300" cy="230" r="90" fill="none" stroke="#ffffff" stroke-width="10"/>
+  <path d="M130 480 C130 370 470 370 470 480" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+  <g font-family="'Courier New', monospace" fill="#595959">
+    <text x="30" y="555" font-size="22" letter-spacing="6">REPLACE_WITH_PHOTO.JPG</text>
+    <text x="30" y="45" font-size="20" letter-spacing="4" fill="#00A4EF">IMG_001</text>
+    <text x="486" y="45" font-size="20" letter-spacing="4">600×600</text>
+  </g>
+  <rect x="0" y="585" width="600" height="3" fill="#00A4EF" opacity="0.5"/>
+</svg>
