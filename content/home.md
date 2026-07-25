@@ -11,7 +11,7 @@
     <p>I explore how to make current vision sytems use the inductive bias present in their world view.</p>
     <p>Currently: ML Researcher <em>Sage Engineering Lab</em>.  Mechanical Engineering <em>Olabisi Onabanjo University</em>. See the <a href="#cv">CV</a> for the full record.</p>
     <div class="contact-strip">
-      <a class="btn btn--solid" href="adetola11korede@proton.me"><svg><use href="#i-mail"/></svg> Email</a>
+      <a class="btn btn--email" href="mailto:adetola11korede@proton.me"><svg><use href="#i-mail"/></svg> Email</a>
       <a class="btn btn--accent" href="https://scholar.google.com" target="_blank" rel="noopener">Scholar</a>
       <a class="btn" href="https://github.com/Akoredetimothy" target="_blank" rel="noopener"><svg><use href="#i-code"/></svg> GitHub</a>
       <a class="btn" href="https://orcid.org" target="_blank" rel="noopener">ORCID</a>
@@ -21,31 +21,25 @@
 
 ## Navigate
 <div class="tilegrid">
-  <a class="tile tile--a1" href="#publications">
+  <a class="tile tile--a1" href="#books">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Publications</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Books</span>
   </a>
-  <a class="tile tile--live" href="#blog">
-    <div class="tile__face tile__face--front">
-      <svg class="tile__icon"><use href="#i-pen"/></svg>
-      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Blog</span>
-    </div>
-    <div class="tile__face tile__face--back">
-      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Latest Notes</span>
-      <span class="tile__sub" style="font-weight: 900; font-size: 1.2rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">tap to read</span>
-    </div>
+  <a class="tile tile--a2" href="#graphs">
+    <svg class="tile__icon"><use href="#i-graph"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Graphs</span>
   </a>
-  <a class="tile tile--a3" href="#cv">
-    <svg class="tile__icon"><use href="#i-doc"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">CV</span>
+  <a class="tile tile--a3" href="#gallery">
+    <svg class="tile__icon"><use href="#i-gallery"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Gallery</span>
   </a>
-  <a class="tile tile--a4" href="mailto:you@example.edu">
-    <svg class="tile__icon"><use href="#i-mail"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Contact</span>
+  <a class="tile tile--a4" href="#games">
+    <svg class="tile__icon"><use href="#i-game"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Games</span>
   </a>
-  <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
-    <svg class="tile__icon"><use href="#i-globe"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Scholar</span>
+  <a class="tile tile--a1" href="#mix">
+    <svg class="tile__icon"><use href="#i-mix"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Mix</span>
   </a>
 </div>
 
