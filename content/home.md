@@ -23,23 +23,29 @@
 <div class="tilegrid">
   <a class="tile tile--a1" href="#books">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Books</span>
+    <span class="tile__label">Books</span>
   </a>
-  <a class="tile tile--a2" href="#graphs">
-    <svg class="tile__icon"><use href="#i-graph"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Graphs</span>
+  <a class="tile tile--live" href="#graphs">
+    <div class="tile__face tile__face--front">
+      <svg class="tile__icon"><use href="#i-graph"/></svg>
+      <span class="tile__label">Graphs</span>
+    </div>
+    <div class="tile__face tile__face--back">
+      <span class="tile__label">Graphs</span>
+      <span class="tile__sub">tap to view</span>
+    </div>
   </a>
   <a class="tile tile--a3" href="#gallery">
     <svg class="tile__icon"><use href="#i-gallery"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Gallery</span>
+    <span class="tile__label">Gallery</span>
   </a>
   <a class="tile tile--a4" href="#games">
     <svg class="tile__icon"><use href="#i-game"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Games</span>
+    <span class="tile__label">Games</span>
   </a>
-  <a class="tile tile--a1" href="#mix">
+  <a class="tile tile--a2" href="#mix">
     <svg class="tile__icon"><use href="#i-mix"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; font-style: inherit; color: #ffffff; mix-blend-mode: difference;">Mix</span>
+    <span class="tile__label">Mix</span>
   </a>
 </div>
 
