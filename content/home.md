@@ -21,31 +21,31 @@
 
 ## Navigate
 <div class="tilegrid">
-  <a class="tile tile--a1" href="#publications">
+  <a class="tile tile--a1" href="#books">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Publications</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Books</span>
   </a>
-  <a class="tile tile--live" href="#blog">
+  <a class="tile tile--live" href="#graphs">
     <div class="tile__face tile__face--front">
-      <svg class="tile__icon"><use href="#i-pen"/></svg>
-      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Blog</span>
+      <svg class="tile__icon"><use href="#i-graph"/></svg>
+      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Graphs</span>
     </div>
     <div class="tile__face tile__face--back">
-      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Latest Notes</span>
-      <span class="tile__sub" style="font-weight: 900; font-size: 1.2rem; color: #ffffff;">tap to read</span>
+      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Interactive Graphs</span>
+      <span class="tile__sub" style="font-weight: 900; font-size: 1.2rem; color: #ffffff;">tap to view</span>
     </div>
   </a>
-  <a class="tile tile--a3" href="#cv">
-    <svg class="tile__icon"><use href="#i-doc"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">CV</span>
+  <a class="tile tile--a3" href="#gallery">
+    <svg class="tile__icon"><use href="#i-gallery"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Gallery</span>
   </a>
-  <a class="tile tile--a4" href="mailto:adetola11korede@proton.me">
-    <svg class="tile__icon"><use href="#i-mail"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Contact</span>
+  <a class="tile tile--a4" href="#games">
+    <svg class="tile__icon"><use href="#i-game"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Games</span>
   </a>
-  <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
-    <svg class="tile__icon"><use href="#i-globe"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Scholar</span>
+  <a class="tile tile--a2" href="#mix">
+    <svg class="tile__icon"><use href="#i-mix"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Mix</span>
   </a>
 </div>
 
