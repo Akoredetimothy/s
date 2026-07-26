@@ -454,6 +454,81 @@ main{min-height:60vh;}
 .tile--live.flipped .tile__face--back{opacity:1;transform:translateY(0);}
 @media(prefers-reduced-motion:reduce){ .tile--live .tile__face{transition:none;} .tile:hover{transform:none;} }
 
+/* ---------- GALLERY GRID ---------- */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  gap:var(--space-4);
+  margin-bottom:var(--space-5);
+}
+.gallery-card{
+  background:var(--color-surface);
+  border:1px solid var(--color-border);
+  overflow:hidden;
+  position:relative;
+  transition:border-color var(--t-fast), box-shadow var(--t-med), transform var(--t-fast);
+}
+.gallery-card:hover{
+  border-color:var(--color-accent);
+  box-shadow:0 0 30px -8px var(--color-accent-glow);
+  transform:translateY(-4px);
+}
+.gallery-card__img{
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  display:block;
+  background:var(--color-surface-alt);
+  border-bottom:1px solid var(--color-border);
+  transition:transform var(--t-med);
+}
+.gallery-card:hover .gallery-card__img{
+  transform:scale(1.04);
+}
+.gallery-card__body{
+  padding:var(--space-3);
+}
+.gallery-card__title{
+  font-family:var(--font-heading);
+  font-size:.95rem;
+  text-transform:uppercase;
+  margin-bottom:var(--space-1);
+  letter-spacing:.5px;
+}
+.gallery-card__desc{
+  font-size:.82rem;
+  color:var(--color-text-dim);
+}
+
+/* ---------- GAME ARCADE BOX ---------- */
+.game-box{
+  background:var(--color-surface);
+  border:2px solid var(--color-border);
+  padding:var(--space-4);
+  text-align:center;
+  margin-bottom:var(--space-5);
+  position:relative;
+}
+.game-canvas{
+  background:#0a0a0a;
+  border:2px solid var(--color-accent);
+  display:block;
+  margin:0 auto var(--space-3);
+  max-width:100%;
+  box-shadow:0 0 24px -4px var(--color-accent-glow);
+}
+.game-hud{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--font-mono);
+  font-size:.88rem;
+  margin-bottom:var(--space-3);
+  padding:var(--space-2) var(--space-3);
+  background:var(--color-surface-alt);
+  border:1px solid var(--color-border);
+}
+
 /* ---------- SPOTLIGHT LIST ---------- */
 .list{list-style:none;margin-bottom:var(--space-5);}
 .list-item{
@@ -714,9 +789,14 @@ const SITE = {
 
 const ROUTES = {
   home:         { file:'content/home.md',         bleed:'ABOUT',    eyebrow:'01 / ABOUT',        note:'profile and research interests',       title:'' },
-  publications: { file:'content/publications.md', bleed:'PAPERS',   eyebrow:'02 / PUBLICATIONS', note:'papers, preprints and talks',          title:'Publications' },
-  blog:         { file:null,                      bleed:'NOTES',    eyebrow:'03 / BLOG',         note:'research notebook — auto-indexed',     title:'Blog' },
-  cv:           { file:'content/cv.md',           bleed:'RECORD',   eyebrow:'04 / CV',           note:'education, experience and service',    title:'Curriculum Vitae' },
+  books:        { file:'content/books.md',        bleed:'READING',  eyebrow:'02 / BOOKS',        note:'curated reading list & literature',    title:'Books' },
+  graphs:       { file:'content/graphs.md',       bleed:'SYSTEMS',  eyebrow:'03 / GRAPHS',       note:'interactive benchmarks & visualizations', title:'Graphs' },
+  gallery:      { file:'content/gallery.md',      bleed:'VISUALS',  eyebrow:'04 / GALLERY',      note:'lab photo gallery & visual showcase',  title:'Gallery' },
+  games:        { file:'content/games.md',        bleed:'PLAY',     eyebrow:'05 / GAMES',        note:'interactive retro games & simulations', title:'Games' },
+  mix:          { file:'content/mix.md',          bleed:'VAULT',    eyebrow:'06 / MIX',          note:'curated experiments & audio-visual mix', title:'Mix' },
+  publications: { file:'content/publications.md', bleed:'PAPERS',   eyebrow:'07 / PUBLICATIONS', note:'papers, preprints and talks',          title:'Publications' },
+  blog:         { file:null,                      bleed:'NOTES',    eyebrow:'08 / BLOG',         note:'research notebook — auto-indexed',     title:'Blog' },
+  cv:           { file:'content/cv.md',           bleed:'RECORD',   eyebrow:'09 / CV',           note:'education, experience and service',    title:'Curriculum Vitae' },
 };
 
 const loader   = document.getElementById('loader');
@@ -737,6 +817,15 @@ function toast(msg){
 function showLoader(on){ loader.classList.toggle('on', !!on); }
 
 function parseMD(md){ return (window.marked) ? marked.parse(md, {gfm:true, breaks:false}) : '<pre>'+esc(md)+'</pre>'; }
+
+function executeScripts(container){
+  container.querySelectorAll('script').forEach(oldScript=>{
+    const newScript = document.createElement('script');
+    Array.from(oldScript.attributes).forEach(attr=>newScript.setAttribute(attr.name, attr.value));
+    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}
 
 /* pull the first top-level "# Heading" out of markdown */
 function extractH1(md){
@@ -789,7 +878,7 @@ async function fetchText(url){
 function setHead(routeKey, title){
   const r = ROUTES[routeKey];
   elBleed.textContent  = r ? r.bleed   : 'ENTRY';
-  elBrow.textContent   = r ? r.eyebrow : '03 / BLOG';
+  elBrow.textContent   = r ? r.eyebrow : '08 / BLOG';
   elTitle.textContent  = title || (r && r.title) || 'Untitled';
   elNote.textContent   = r ? r.note    : '';
   document.title = (title || (r && r.title) || 'Your Name') + ' — Research';
@@ -801,7 +890,7 @@ function setActiveNav(routeKey){
   });
 }
 
-/* ---------- standard markdown pages (home / publications / cv) ---------- */
+/* ---------- standard markdown pages ---------- */
 async function renderPage(key){
   const r = ROUTES[key];
   setActiveNav(key); setHead(key, r.title); showLoader(true);
@@ -810,6 +899,7 @@ async function renderPage(key){
     const { title, md } = extractH1(raw);
     if(title) setHead(key, key === 'home' ? title : (r.title || title));
     content.innerHTML = parseMD(md);
+    executeScripts(content);
   }catch(err){
     renderError(key, err);
   }

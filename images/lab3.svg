@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <rect width="800" height="500" fill="#141c14"/>
+  <circle cx="250" cy="250" r="120" stroke="#7FBA00" stroke-width="2" fill="none"/>
+  <circle cx="550" cy="250" r="120" stroke="#7FBA00" stroke-width="2" fill="none"/>
+  <line x1="250" y1="250" x2="550" y2="250" stroke="#7FBA00" stroke-width="3" stroke-dasharray="4,4"/>
+  <text x="400" y="240" fill="#ffffff" font-family="monospace" font-size="20" font-weight="bold" text-anchor="middle">AUTOMATION PIPELINE</text>
+  <text x="400" y="270" fill="#7FBA00" font-family="sans-serif" font-size="14" text-anchor="middle">FIG.03 — MULTI-AGENT KINEMATICS</text>
+</svg>

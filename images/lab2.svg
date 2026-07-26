@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <rect width="800" height="500" fill="#0d1117"/>
+  <defs>
+    <linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F25022" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FFB900" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+  <path d="M 0 400 L 200 250 L 400 320 L 600 150 L 800 280 L 800 500 L 0 500 Z" fill="url(#g2)"/>
+  <polyline points="0,400 200,250 400,320 600,150 800,280" fill="none" stroke="#F25022" stroke-width="4"/>
+  <circle cx="600" cy="150" r="8" fill="#FFB900"/>
+  <text x="400" y="100" fill="#ffffff" font-family="monospace" font-size="20" font-weight="bold" text-anchor="middle">PHYSICS-INFORMED OPERATOR LOSS</text>
+  <text x="400" y="130" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="14" text-anchor="middle">FIG.02 — CONVERGENCE MANIFOLD</text>
+</svg>
