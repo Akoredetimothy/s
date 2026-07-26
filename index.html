@@ -427,26 +427,14 @@ main{min-height:60vh;}
 .tile:hover .tile__icon{transform:rotate(-8deg) scale(1.12);}
 .tile__label{font-family:var(--font-heading);text-transform:uppercase;font-size:1.25rem;font-weight:900;letter-spacing:.5px;}
 .tile__sub{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;text-transform:uppercase;opacity:.85;}
-/* Navigate Tile Text & Icon Colors (Email style: white on black theme, black on white theme) */
-:root:not([data-theme="light"]) .tilegrid .tile,
-:root:not([data-theme="light"]) .tilegrid .tile__label,
-:root:not([data-theme="light"]) .tilegrid .tile__sub,
-[data-theme="dark"] .tilegrid .tile,
-[data-theme="dark"] .tilegrid .tile__label,
-[data-theme="dark"] .tilegrid .tile__sub{
+/* Navigate Tile Text & Icon Colors (Pure White) */
+.tilegrid .tile,
+.tilegrid .tile__label,
+.tilegrid .tile__sub{
   color:#ffffff !important;
 }
-:root:not([data-theme="light"]) .tilegrid .tile__icon,
-[data-theme="dark"] .tilegrid .tile__icon{
+.tilegrid .tile__icon{
   stroke:#ffffff !important;
-}
-[data-theme="light"] .tilegrid .tile,
-[data-theme="light"] .tilegrid .tile__label,
-[data-theme="light"] .tilegrid .tile__sub{
-  color:#000000 !important;
-}
-[data-theme="light"] .tilegrid .tile__icon{
-  stroke:#000000 !important;
 }
 .tile--live .tile__face{position:absolute;inset:0;padding:var(--space-3) var(--space-2);display:flex;flex-direction:column;justify-content:space-between;transition:opacity .6s ease,transform .6s ease;}
 .tile--live .tile__face--back{opacity:0;transform:translateY(10px);}

@@ -21,31 +21,31 @@
 
 ## Navigate
 <div class="tilegrid">
-  <a class="tile tile--a1" href="#books">
+  <a class="tile tile--a1" href="#publications">
     <svg class="tile__icon"><use href="#i-book"/></svg>
-    <span class="tile__label">Books</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Publications</span>
   </a>
-  <a class="tile tile--live" href="#graphs">
+  <a class="tile tile--live" href="#blog">
     <div class="tile__face tile__face--front">
-      <svg class="tile__icon"><use href="#i-graph"/></svg>
-      <span class="tile__label">Graphs</span>
+      <svg class="tile__icon"><use href="#i-pen"/></svg>
+      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Blog</span>
     </div>
     <div class="tile__face tile__face--back">
-      <span class="tile__label">Graphs</span>
-      <span class="tile__sub">tap to view</span>
+      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Latest Notes</span>
+      <span class="tile__sub" style="font-weight: 900; font-size: 1.2rem; color: #ffffff;">tap to read</span>
     </div>
   </a>
-  <a class="tile tile--a3" href="#gallery">
-    <svg class="tile__icon"><use href="#i-gallery"/></svg>
-    <span class="tile__label">Gallery</span>
+  <a class="tile tile--a3" href="#cv">
+    <svg class="tile__icon"><use href="#i-doc"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">CV</span>
   </a>
-  <a class="tile tile--a4" href="#games">
-    <svg class="tile__icon"><use href="#i-game"/></svg>
-    <span class="tile__label">Games</span>
+  <a class="tile tile--a4" href="mailto:adetola11korede@proton.me">
+    <svg class="tile__icon"><use href="#i-mail"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Contact</span>
   </a>
-  <a class="tile tile--a2" href="#mix">
-    <svg class="tile__icon"><use href="#i-mix"/></svg>
-    <span class="tile__label">Mix</span>
+  <a class="tile" href="https://scholar.google.com" target="_blank" rel="noopener">
+    <svg class="tile__icon"><use href="#i-globe"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Scholar</span>
   </a>
 </div>
 
