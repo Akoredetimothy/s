@@ -2,9 +2,11 @@
 
 A static personal site for a researcher, styled after the **N10** (dark, Windows-Phone-Metro × Nokia/Symbian) and **NokiaFlux** (light, high-contrast) design languages — combined into one shell with a **theme toggle** (dark/light) and an **accent switcher**.
 
-All content is **markdown**. There is **no build step**: a single `index.html` loads markdown files in the browser with [marked.js](https://github.com/markedjs/marked) and routes everything through URL hashes (`#home`, `#publications`, `#blog`, `#cv`, `#blog/<slug>`).
+All content is **markdown**. There is **no build step**: a single `index.html` loads markdown files in the browser with [marked.js](https://github.com/markedjs/marked) and routes everything through URL hashes (`#home`, `#books`, `#publications`, `#blog`, `#cv`, `#blog/<slug>`, `#books/<slug>`).
 
-**The blog indexes itself.** Drop any `.md` file into `blog/` and push — the listing page discovers it automatically via the GitHub API. No index file to update.
+**The blog and books index themselves.** Drop any `.md` file into `blog/` or `books/` and push — the listing pages discover them automatically via the GitHub API. No index file to update.
+
+The whole site can be authored from **Obsidian** — open this folder as a vault, write posts/book notes as plain markdown with Properties (front matter), and publish with one `git push`.
 
 ---
 
@@ -30,15 +32,29 @@ repo/
 │   ├── home.md              About page — photo panel, bio, tiles, links
 │   ├── publications.md      Publications — styled .pub-entry cards, grouped by year
 │   ├── cv.md                CV — .cv-entry blocks (education, roles, awards…)
-│   └── blog.md              Fallback blog index (manual; used only if auto-discovery fails)
-├── blog/
-│   ├── welcome-to-the-notebook.md   Sample post (delete or rewrite)
-│   └── markdown-field-guide.md      Sample post showing every supported feature
-├── images/
-│   └── photo.svg            Placeholder portrait — replace with your photo
+│   ├── blog.md              Fallback blog index (manual; used only if auto-discovery fails)
+│   └── books.md             Fallback books index (manual; used only if auto-discovery fails)
+├── blog/                    Each .md file here becomes a post automatically
+├── books/                   Each .md file here becomes a book note automatically
+├── images/                  Drop photos/images here; reference as `![](images/x.png)`
+├── templates/               Obsidian templates: blog.md, book.md
+├── .obsidian/               Obsidian vault config (workspace.json is git-ignored)
 ├── .nojekyll
 └── README.md
 ```
+
+---
+
+## Authoring from Obsidian
+
+1. In Obsidian: **Open folder as vault** → select this repo folder.
+2. Settings → Files & Links → New link format: **Markdown**, Default location for attachments: **`images/`** (already configured in `.obsidian/`).
+3. To write a post: create a note in `blog/` (or use the **Insert template** → `templates/blog.md`).
+4. To write a book note: create a note in `books/` (template: `templates/book.md`).
+5. Drag images into the note — Obsidian drops them into `images/` and writes `![](images/…)` links automatically.
+6. Commit and push — the site updates within a minute or two.
+
+> Keep links between notes as standard markdown links (`[text](#blog/slug)`), not Obsidian wikilinks `[[…]]`, so they resolve on the live site.
 
 ---
 

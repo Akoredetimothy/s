@@ -14,7 +14,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Name — Research</title>
+<title>Akorede Adetola — Research</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single&family=Quantico:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -623,6 +623,7 @@ main{min-height:60vh;}
 .post-row__main{padding:var(--space-3) var(--space-3) var(--space-3) 0;min-width:0;}
 .post-row__title{font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.5px;font-size:.98rem;color:var(--color-text);margin-bottom:6px;}
 .post-row__excerpt{font-size:.85rem;color:var(--color-text-dim);max-width:72ch;}
+.post-row__author{margin-left:10px;font-family:var(--font-mono);font-size:.62rem;color:var(--color-accent);letter-spacing:.5px;text-transform:uppercase;}
 .post-row__tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
 .post-row__chev{width:16px;height:16px;stroke:var(--color-text-dim);fill:none;flex-shrink:0;align-self:center;margin-right:var(--space-3);transition:transform var(--t-fast),stroke var(--t-fast);}
 .post-row:hover .post-row__chev{transform:translateX(4px);stroke:var(--color-accent);}
@@ -684,11 +685,11 @@ footer p{margin:0;font-size:.8rem;}
 <header class="appbar">
   <div class="appbar__inner container">
     <a href="#home" class="logo-tile" id="logoTile" aria-label="Home">
-      <span class="face face--front mark">YN</span>
+      <span class="face face--front mark">AA</span>
       <span class="face face--back">✳</span>
     </a>
     <a href="#home" class="appbar__name">
-      <span class="n name">Your Name</span>
+      <span class="n name">Akorede Adetola</span>
       <span class="badge">Research</span>
     </a>
     <nav class="appbar__nav" id="pivotNav">
@@ -738,7 +739,7 @@ footer p{margin:0;font-size:.8rem;}
     <div class="page-head__bleed" id="pageBleed">ABOUT</div>
     <div class="container page-head__inner">
       <span class="eyebrow" id="pageEyebrow">01 / ABOUT</span>
-      <h1><span id="pageTitle">Your Name</span><span class="cursor">_</span></h1>
+      <h1><span id="pageTitle">Akorede Adetola</span><span class="cursor">_</span></h1>
       <p class="section-note" id="pageNote">profile and research interests</p>
     </div>
   </section>
@@ -749,8 +750,8 @@ footer p{margin:0;font-size:.8rem;}
 <footer>
   <div class="container foot-inner">
     <div class="foot-brand">
-      <span class="foot-mark mark">YN</span>
-      <p>© <span id="year">2026</span> <span class="name">Your Name</span>. All rights reserved.</p>
+      <span class="foot-mark mark">AA</span>
+      <p>© <span id="year">2026</span> <span class="name">Akorede Adetola</span>. All rights reserved.</p>
     </div>
     <span class="foot-mono">N10 × NOKIAFLUX · <b>MARKDOWN DRIVEN</b> · NO BUILD STEP</span>
   </div>
@@ -773,11 +774,12 @@ const SITE = {
   repo:  '',        // e.g. 'janesmith.github.io' — '' auto-detect
   branch: 'main',
   blogDir: 'blog',
+  booksDir: 'books',
 };
 
 const ROUTES = {
   home:         { file:'content/home.md',         bleed:'ABOUT',    eyebrow:'01 / ABOUT',        note:'profile and research interests',       title:'' },
-  books:        { file:'content/books.md',        bleed:'READING',  eyebrow:'02 / BOOKS',        note:'curated reading list & literature',    title:'Books' },
+  books:        { file:null,                      bleed:'READING',  eyebrow:'02 / BOOKS',        note:'book notes & summaries — auto-indexed', title:'Books' },
   graphs:       { file:'content/graphs.md',       bleed:'SYSTEMS',  eyebrow:'03 / GRAPHS',       note:'interactive benchmarks & visualizations', title:'Graphs' },
   gallery:      { file:'content/gallery.md',      bleed:'VISUALS',  eyebrow:'04 / GALLERY',      note:'lab photo gallery & visual showcase',  title:'Gallery' },
   games:        { file:'content/games.md',        bleed:'PLAY',     eyebrow:'05 / GAMES',        note:'interactive retro games & simulations', title:'Games' },
@@ -869,7 +871,7 @@ function setHead(routeKey, title){
   elBrow.textContent   = r ? r.eyebrow : '08 / BLOG';
   elTitle.textContent  = title || (r && r.title) || 'Untitled';
   elNote.textContent   = r ? r.note    : '';
-  document.title = (title || (r && r.title) || 'Your Name') + ' — Research';
+  document.title = (title || (r && r.title) || 'Akorede Adetola') + ' — Research';
 }
 
 function setActiveNav(routeKey){
@@ -909,10 +911,11 @@ function renderError(where, err){
 }
 
 /* ===================================================================
-   BLOG — auto-discovers every .md file in blog/ via the GitHub API.
-   Drop a file into blog/, push, and it appears here automatically.
-   Falls back to the manual listing in content/blog.md when the API
-   is unreachable (local testing, rate limits, custom domain unset).
+   COLLECTIONS — blog & books auto-discover every .md file in their
+   folder via the GitHub API. Drop a file in, push, and it appears
+   here automatically. Falls back to a manual listing (content/blog.md,
+   content/books.md) when the API is unreachable (local testing,
+   rate limits, custom domain unset).
    =================================================================== */
 
 function detectRepo(){
@@ -928,47 +931,47 @@ function detectRepo(){
   if(SITE.owner && SITE.repo) return {owner:SITE.owner, repo:SITE.repo};
   return null; // localhost / custom domain without config → manual fallback
 }
-function rawURL(slug){ return SITE.blogDir + '/' + encodeURIComponent(slug) + '.md'; }
+function rawURL(dir, slug){ return dir + '/' + encodeURIComponent(slug) + '.md'; }
 
-const POSTS_CACHE_KEY = 'nf_posts_v1';
-const POSTS_TTL = 5*60*1000;
+const LIST_TTL = 5*60*1000;
 
-async function discoverPosts(){
+async function discoverEntries(dir, cacheKey){
   const repo = detectRepo();
   if(!repo) return null;
   try{
-    const cached = JSON.parse(sessionStorage.getItem(POSTS_CACHE_KEY) || 'null');
-    if(cached && (Date.now() - cached.ts) < POSTS_TTL) return cached.posts;
+    const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
+    if(cached && (Date.now() - cached.ts) < LIST_TTL) return cached.entries;
   }catch(e){}
-  const api = `https://api.github.com/repos/${repo.owner}/${repo.repo}/contents/${SITE.blogDir}?ref=${SITE.branch}`;
+  const api = `https://api.github.com/repos/${repo.owner}/${repo.repo}/contents/${dir}?ref=${SITE.branch}`;
   const res = await fetch(api, {headers:{'Accept':'application/vnd.github+json'}});
   if(!res.ok) return null;
   const files = (await res.json()).filter(f => f.type === 'file' && f.name.toLowerCase().endsWith('.md'));
-  const posts = await Promise.all(files.map(async f => {
+  const entries = await Promise.all(files.map(async f => {
     const slug = f.name.replace(/\.md$/i,'');
     try{
-      const raw = await fetchText(SITE.blogDir + '/' + encodeURIComponent(f.name));
+      const raw = await fetchText(dir + '/' + encodeURIComponent(f.name));
       const {data, body} = parseFrontMatter(raw);
       const {title, md} = extractH1(body);
       return { slug, title: data.title || title || slug,
-               date: data.date || '', tags: data.tags ? data.tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
+               author: data.author || '', date: data.date || '',
+               tags: data.tags ? data.tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
                excerpt: data.excerpt || firstExcerpt(md) };
-    }catch(e){ return {slug, title:slug, date:'', tags:[], excerpt:''}; }
+    }catch(e){ return {slug, title:slug, author:'', date:'', tags:[], excerpt:''}; }
   }));
-  try{ sessionStorage.setItem(POSTS_CACHE_KEY, JSON.stringify({ts:Date.now(), posts})); }catch(e){}
-  return posts;
+  try{ sessionStorage.setItem(cacheKey, JSON.stringify({ts:Date.now(), entries})); }catch(e){}
+  return entries;
 }
 
-async function manualPostList(){
-  const raw = await fetchText('content/blog.md');
-  const posts = [];
-  const re = /[-*]\s+\[([^\]]+)\]\(#blog\/([A-Za-z0-9._-]+)\)\s*[—–-]\s*(.+)/g;
-  let m; while((m = re.exec(raw))) posts.push({title:m[1], slug:m[2], date:m[3], tags:[], excerpt:''});
-  return posts;
+async function manualEntries(fallbackFile, routePrefix){
+  const raw = await fetchText(fallbackFile);
+  const entries = [];
+  const re = new RegExp('[-*]\\s+\\[([^\\]]+)\\]\\(#' + routePrefix + '/([A-Za-z0-9._-]+)\\)\\s*[—–-]\\s*(.+)', 'g');
+  let m; while((m = re.exec(raw))) entries.push({title:m[1], slug:m[2], author:'', date:m[3], tags:[], excerpt:''});
+  return entries;
 }
 
-function sortPosts(posts){
-  return posts.slice().sort((a,b)=>{
+function sortEntries(entries){
+  return entries.slice().sort((a,b)=>{
     const da = fmtDate(a.date), db = fmtDate(b.date);
     if(da && db) return db.d - da.d;
     if(da) return -1; if(db) return 1;
@@ -976,66 +979,76 @@ function sortPosts(posts){
   });
 }
 
-async function renderBlogIndex(){
-  setActiveNav('blog'); setHead('blog', 'Blog'); showLoader(true);
-  let posts = null, auto = true;
-  posts = await discoverPosts();
-  if(!posts){ auto = false; try{ posts = await manualPostList(); }catch(e){ posts = []; } }
-  posts = sortPosts(posts);
+function collectionRow(routeKey, e){
+  const d = fmtDate(e.date);
+  return `<a class="post-row" href="#${routeKey}/${encodeURIComponent(e.slug)}">
+    <div class="post-row__date${d?'':' is-empty'}">${d ? `<span>${d.m}</span><span style="font-size:1.05rem">${d.day}</span><span class="y">${d.y}</span>` : `<span>—</span>`}</div>
+    <div class="post-row__main">
+      <div class="post-row__title">${esc(e.title)}${e.author ? `<span class="post-row__author">${esc(e.author)}</span>` : ''}</div>
+      ${e.excerpt ? `<div class="post-row__excerpt">${e.excerpt}${e.excerpt.length >= 148 ? '…' : ''}</div>` : ''}
+      ${e.tags && e.tags.length ? `<div class="post-row__tags">${e.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
+    </div>
+    <svg class="post-row__chev"><use href="#i-chevron"/></svg>
+  </a>`;
+}
 
-  elNote.textContent = posts.length
-    ? `${pad(posts.length)} entries indexed ${auto ? '// auto-discovered from /blog' : '// manual listing'}`
+async function renderCollectionIndex(routeKey, cfg){
+  setActiveNav(routeKey); setHead(routeKey, cfg.title); showLoader(true);
+  let entries = null, auto = true;
+  entries = await discoverEntries(cfg.dir, cfg.cacheKey);
+  if(!entries){ auto = false; try{ entries = await manualEntries(cfg.fallbackFile, routeKey); }catch(e){ entries = []; } }
+  entries = sortEntries(entries);
+
+  elNote.textContent = entries.length
+    ? `${pad(entries.length)} entries indexed ${auto ? `// auto-discovered from /${cfg.dir}` : '// manual listing'}`
     : 'no entries found yet';
 
-  if(!posts.length){
+  if(!entries.length){
     content.innerHTML = `<div class="box"><span class="eyebrow">// EMPTY</span>
-      <h3>No posts yet</h3>
-      <p>Drop a markdown file into <code>${SITE.blogDir}/</code> and it will appear here automatically.</p></div>`;
+      <h3>${cfg.emptyTitle}</h3>
+      <p>Drop a markdown file into <code>${cfg.dir}/</code> and it will appear here automatically.</p></div>`;
   }else{
-    content.innerHTML = '<div class="post-list">' + posts.map(p=>{
-      const d = fmtDate(p.date);
-      return `<a class="post-row" href="#blog/${encodeURIComponent(p.slug)}">
-        <div class="post-row__date${d?'':' is-empty'}">${d ? `<span>${d.m}</span><span style="font-size:1.05rem">${d.day}</span><span class="y">${d.y}</span>` : `<span>—</span>`}</div>
-        <div class="post-row__main">
-          <div class="post-row__title">${esc(p.title)}</div>
-          ${p.excerpt ? `<div class="post-row__excerpt">${p.excerpt}${p.excerpt.length >= 148 ? '…' : ''}</div>` : ''}
-          ${p.tags && p.tags.length ? `<div class="post-row__tags">${p.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
-        </div>
-        <svg class="post-row__chev"><use href="#i-chevron"/></svg>
-      </a>`;
-    }).join('') + '</div>';
+    content.innerHTML = '<div class="post-list">' + entries.map(e=>collectionRow(routeKey, e)).join('') + '</div>';
   }
   showLoader(false); window.scrollTo({top:0});
 }
 
-async function renderPost(slug){
-  setActiveNav('blog');
-  setHead('blog', 'Blog'); elBrow.textContent = '03 / BLOG · ENTRY'; elBleed.textContent = 'NOTES';
+async function renderCollectionEntry(routeKey, cfg, slug){
+  setActiveNav(routeKey);
+  setHead(routeKey, cfg.title); elBrow.textContent = cfg.entryBrow; elBleed.textContent = cfg.bleed;
   showLoader(true);
   try{
-    const raw = await fetchText(rawURL(slug));
+    const raw = await fetchText(rawURL(cfg.dir, slug));
     const {data, body} = parseFrontMatter(raw);
     const {title, md} = extractH1(body);
     const finalTitle = data.title || title || slug;
-    setHead('blog', finalTitle);
-    elBrow.textContent = '03 / BLOG · ENTRY';
+    setHead(routeKey, finalTitle);
+    elBrow.textContent = cfg.entryBrow;
     const d = data.date ? fmtDate(data.date) : null;
     const meta = [];
     if(d) meta.push(`<span class="meta-chip">DATE <b>${d.long.toUpperCase()}</b></span>`);
+    if(data.author) meta.push(`<span class="meta-chip">AUTHOR <b>${esc(data.author)}</b></span>`);
     meta.push(`<span class="meta-chip">READ <b>${readingTime(md)} MIN</b></span>`);
     (data.tags ? data.tags.split(',').map(t=>t.trim()).filter(Boolean) : []).forEach(t=>meta.push(`<span class="chip">${esc(t)}</span>`));
     content.innerHTML = `
       <div class="post-meta">${meta.join('')}</div>
       ${parseMD(md)}
       <div class="post-nav">
-        <a class="btn btn--accent" href="#blog"><svg><use href="#i-back"/></svg> All Posts</a>
+        <a class="btn btn--accent" href="#${routeKey}"><svg><use href="#i-back"/></svg> ${cfg.backLabel}</a>
         <a class="btn" href="#publications">Publications <svg><use href="#i-chevron"/></svg></a>
       </div>`;
   }catch(err){
-    renderError('blog', err);
+    renderError(routeKey, err);
   }
   showLoader(false); window.scrollTo({top:0});
 }
+
+const COLLECTIONS = {
+  blog:  { dir:'blog',  cacheKey:'nf_col_blog_v1',  fallbackFile:'content/blog.md',  title:'Blog',
+           entryBrow:'03 / BLOG · ENTRY',  bleed:'NOTES',   backLabel:'All Posts', emptyTitle:'No posts yet' },
+  books: { dir:'books', cacheKey:'nf_col_books_v1', fallbackFile:'content/books.md', title:'Books',
+           entryBrow:'02 / BOOKS · ENTRY', bleed:'READING', backLabel:'All Books', emptyTitle:'No books yet' },
+};
 
 /* ===================================================================
    ROUTER
@@ -1044,9 +1057,14 @@ function route(){
   const hash = (location.hash || '#home').slice(1);
   if(hash.startsWith('blog/')){
     const slug = decodeURIComponent(hash.slice(5).replace(/\/+$/,''));
-    if(slug) return renderPost(slug);
+    if(slug) return renderCollectionEntry('blog', COLLECTIONS.blog, slug);
   }
-  if(ROUTES[hash] && hash === 'blog') return renderBlogIndex();
+  if(hash.startsWith('books/')){
+    const slug = decodeURIComponent(hash.slice(6).replace(/\/+$/,''));
+    if(slug) return renderCollectionEntry('books', COLLECTIONS.books, slug);
+  }
+  if(ROUTES[hash] && hash === 'blog') return renderCollectionIndex('blog', COLLECTIONS.blog);
+  if(ROUTES[hash] && hash === 'books') return renderCollectionIndex('books', COLLECTIONS.books);
   if(ROUTES[hash]) return renderPage(hash);
   return renderPage('home');
 }

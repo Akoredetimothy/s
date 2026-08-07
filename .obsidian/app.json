@@ -1,0 +1,9 @@
+{
+  "attachmentFolderPath": "images",
+  "useMarkdownLinks": true,
+  "newLinkFormat": "shortest",
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": true,
+  "newFileLocation": "root",
+  "promptDelete": false
+}

@@ -1,0 +1,7 @@
+# Obsidian machine-local state (safe to not track)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# OS junk
+.DS_Store
+Thumbs.db
