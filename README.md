@@ -37,7 +37,7 @@ repo/
 ├── blog/                    Each .md file here becomes a post automatically
 ├── books/                   Each .md file here becomes a book note automatically
 ├── images/                  Drop photos/images here; reference as `![](images/x.png)`
-├── templates/               Obsidian templates: blog.md, book.md
+├── _templates/              Obsidian templates: blog.md, book.md
 ├── .obsidian/               Obsidian vault config (workspace.json is git-ignored)
 ├── .nojekyll
 └── README.md
@@ -49,8 +49,8 @@ repo/
 
 1. In Obsidian: **Open folder as vault** → select this repo folder.
 2. Settings → Files & Links → New link format: **Markdown**, Default location for attachments: **`images/`** (already configured in `.obsidian/`).
-3. To write a post: create a note in `blog/` (or use the **Insert template** → `templates/blog.md`).
-4. To write a book note: create a note in `books/` (template: `templates/book.md`).
+3. To write a post: create a note in `blog/` (or use the **Insert template** → `_templates/blog.md`).
+4. To write a book note: create a note in `books/` (template: `_templates/book.md`).
 5. Drag images into the note — Obsidian drops them into `images/` and writes `![](images/…)` links automatically.
 6. Commit and push — the site updates within a minute or two.
 
