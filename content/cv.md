@@ -51,29 +51,6 @@
 <div class="cv-entry">
   <div class="cv-entry-header">
     <div>
-      <div class="cv-entry-title">Maintenance Engineer</div>
-      <div class="cv-entry-subtitle">Tempo Paper, Pulp and Packaging Ltd. — Ogun, Nigeria</div>
-    </div>
-    <div class="cv-entry-date">Sept 2024 — Present</div>
-  </div>
-  <div class="cv-entry-details">
-    <ul>
-      <li>Review job plans with senior maintenance engineers and coordinate task allocation for 12 technicians, supporting efficient scheduling of maintenance work.</li>
-      <li>Maintain accurate maintenance records in Microsoft Dynamics 365, relied on by senior engineers for reporting, visibility, and planning.</li>
-      <li>Attend cross-departmental training on company operations to build end-to-end knowledge of the plant.</li>
-      <li>Support sister plants during large-scale maintenance tasks by providing additional manpower and technical assistance to meet deadlines.</li>
-      <li>Present daily standup updates on completed work, overnight progress, and planned tasks to a team of over 19 engineers and technicians.</li>
-      <li>Facilitate virtual HSE engagements with plant operators nationwide, reinforcing procedural compliance, situational awareness, and safe operating practices.</li>
-      <li>Apply Piping and Instrumentation Diagrams (P&amp;IDs) and Process Flow Diagrams (PFDs) to support maintenance planning, troubleshooting, and process optimization.</li>
-      <li>Design in-house CAD models and technical drawings for custom repair components in Fusion 360, with dimensions, tolerances, and materials in mind, supplying third-party fabricators.</li>
-      <li>Collaborate with the store department on fulfilling spare parts, raw materials, tooling, and equipment through Oracle NetSuite and Dynamics 365.</li>
-    </ul>
-  </div>
-</div>
-
-<div class="cv-entry">
-  <div class="cv-entry-header">
-    <div>
       <div class="cv-entry-title">Independent ML Researcher</div>
       <div class="cv-entry-subtitle">Sage Engineering Lab</div>
     </div>
