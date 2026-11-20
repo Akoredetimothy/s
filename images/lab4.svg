@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <rect width="800" height="500" fill="#0b0f19"/>
+  <defs>
+    <linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#4facfe" stop-opacity="0.3"/>
+    </linearGradient>
+    <pattern id="flowGrid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(0,242,254,0.08)" stroke-width="1"/>
+      <circle cx="25" cy="25" r="1.5" fill="rgba(0,242,254,0.2)"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#flowGrid)"/>
+  <!-- Flow vectors -->
+  <g stroke="url(#g4)" stroke-width="2" stroke-linecap="round">
+    <path d="M 100 250 C 250 100, 350 400, 500 250 M 500 250 C 600 150, 680 320, 750 250" fill="none" stroke-width="3"/>
+    <path d="M 120 200 C 270 50, 370 350, 520 200 M 520 200 C 620 100, 700 270, 770 200" fill="none" opacity="0.6"/>
+    <path d="M 80 300 C 230 150, 330 450, 480 300 M 480 300 C 580 200, 660 370, 730 300" fill="none" opacity="0.6"/>
+  </g>
+  <!-- Vector Arrows / Nodes -->
+  <circle cx="500" cy="250" r="6" fill="#00f2fe"/>
+  <circle cx="250" cy="180" r="4" fill="#4facfe"/>
+  <circle cx="350" cy="330" r="4" fill="#00f2fe"/>
+  <text x="400" y="80" fill="#ffffff" font-family="monospace" font-size="20" font-weight="bold" text-anchor="middle">OPTICAL FLOW VECTOR DYNAMICS</text>
+  <text x="400" y="110" fill="#00f2fe" font-family="sans-serif" font-size="14" text-anchor="middle">FIG.04 — SPATIAL MOTION ESTIMATION</text>
+</svg>

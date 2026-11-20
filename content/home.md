@@ -2,7 +2,7 @@
 
 <div class="about-panel">
   <div class="about-photo">
-    <img src="images/photo.svg" alt="Portrait of Your Name">
+    <img src="images/portrait.png" alt="Portrait of Akorede Adetola">
     <div class="sweep"></div>
     <div class="about-photo__caption"><span>FIG.01</span><b>PORTRAIT</b></div>
   </div>
