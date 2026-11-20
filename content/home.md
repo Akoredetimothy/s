@@ -12,9 +12,9 @@
     <p>Currently: ML Researcher <em>Sage Engineering Lab</em>.  Mechanical Engineering <em>Olabisi Onabanjo University</em>. See the <a href="#cv">CV</a> for the full record.</p>
     <div class="contact-strip">
       <a class="btn btn--email" href="mailto:adetola11korede@proton.me"><svg><use href="#i-mail"/></svg> Email</a>
-      <a class="btn btn--accent" href="https://scholar.google.com" target="_blank" rel="noopener">Scholar</a>
+      <a class="btn btn--accent" href="#scholar">Scholar</a>
       <a class="btn" href="https://github.com/Akoredetimothy" target="_blank" rel="noopener"><svg><use href="#i-code"/></svg> GitHub</a>
-      <a class="btn" href="https://orcid.org" target="_blank" rel="noopener">ORCID</a>
+      <a class="btn" href="#orcid">ORCID</a>
     </div>
   </div>
 </div>
