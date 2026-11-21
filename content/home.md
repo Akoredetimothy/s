@@ -4,11 +4,11 @@
   <div class="about-photo">
     <img src="images/portrait.png" alt="Portrait of Akorede Adetola">
     <div class="sweep"></div>
-    <div class="about-photo__caption"><span>FIG.01</span><b>PORTRAIT</b></div>
+    <div class="about-photo__caption"><span>ME</span><b>PORTRAIT</b></div>
   </div>
   <div class="about-body">
-    <p class="lead"><strong>Researching on the engineering fundamentals for the next kardashev climb </strong> working at the intersection of Intelligent Vision Systems and Automation.</p>
-    <p>I explore how to make current vision sytems use the inductive bias present in their world view.</p>
+    <p class="lead"><strong>Researching the engineering fundamentals for the next Kardashev climb</strong> — building mechanical, visual and intelligent systems that draw on both old, nature-inspired biological substrates and new ones rooted in distinct technology stacks.</p>
+    <p>I explore how to make current vision systems use the inductive bias present in their world view.</p>
     <p>Currently: ML Researcher <em>Sage Engineering Lab</em>.  Mechanical Engineering <em>Olabisi Onabanjo University</em>. See the <a href="#cv">CV</a> for the full record.</p>
     <div class="contact-strip">
       <a class="btn btn--email" href="mailto:adetola11korede@proton.me"><svg><use href="#i-mail"/></svg> Email</a>
