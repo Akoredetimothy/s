@@ -31,8 +31,8 @@
       <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Graphs</span>
     </div>
     <div class="tile__face tile__face--back">
-      <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Interactive Graphs</span>
-      <span class="tile__sub" style="font-weight: 900; font-size: 1.2rem; color: #ffffff;">tap to view</span>
+      <span class="tile__label" style="font-weight: 900; font-size: .9rem; line-height: 1.15; letter-spacing: 0; color: #ffffff;">Interactive Graphs</span>
+      <span class="tile__sub" style="font-weight: 700; font-size: .65rem; letter-spacing: 1px; color: #ffffff;">tap to view</span>
     </div>
   </a>
   <a class="tile tile--a3" href="#gallery">

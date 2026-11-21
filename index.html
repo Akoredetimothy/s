@@ -121,7 +121,6 @@ p{color:var(--color-text-dim);max-width:68ch;}
   margin-bottom:var(--space-2);
 }
 .section-note{color:var(--color-text-dim);font-size:.85rem;margin-bottom:var(--space-4);}
-.section-note::before{content:'// ';color:var(--color-accent);}
 
 /* ---------- LAYOUT ---------- */
 .container{width:100%;max-width:600px;margin-inline:auto;padding-inline:var(--space-3);}
@@ -940,10 +939,10 @@ async function renderPage(key){
 function renderError(where, err){
   content.innerHTML = `
     <div class="box box--alert">
-      <span class="eyebrow" style="color:var(--a2)">// LOAD FAILURE</span>
+      <span class="eyebrow" style="color:var(--a2)">LOAD FAILURE</span>
       <h3>Could not load content</h3>
       <p>${esc(String(err))}</p>
-      <p style="margin-top:12px">If you opened this file directly (<code>file://</code>), the browser blocks
+      <p style="margin-top:12px">If you opened this file directly in your browser, the browser blocks
       markdown loading. Run a local server instead:</p>
       <pre><code>python3 -m http.server 8080
 # then visit http://localhost:8080</code></pre>
@@ -1041,11 +1040,11 @@ async function renderCollectionIndex(routeKey, cfg){
   entries = sortEntries(entries);
 
   elNote.textContent = entries.length
-    ? `${pad(entries.length)} entries indexed ${auto ? `// auto-discovered from /${cfg.dir}` : '// manual listing'}`
+    ? `${pad(entries.length)} entries indexed ${auto ? `auto-discovered from /${cfg.dir}` : 'manual listing'}`
     : 'no entries found yet';
 
   if(!entries.length){
-    content.innerHTML = `<div class="box"><span class="eyebrow">// EMPTY</span>
+    content.innerHTML = `<div class="box"><span class="eyebrow">EMPTY</span>
       <h3>${cfg.emptyTitle}</h3>
       <p>Drop a markdown file into <code>${cfg.dir}/</code> and it will appear here automatically.</p></div>`;
   }else{

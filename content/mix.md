@@ -5,7 +5,7 @@
 ## Interactive Sound Synth
 
 <div class="box" style="text-align:center;">
-  <span class="eyebrow">// WEB AUDIO API SYNTH</span>
+  <span class="eyebrow">WEB AUDIO API SYNTH</span>
   <h3>Cyber Sound Generator</h3>
   <p>Generate retro Symbian OS / Metro audio tones using native Web Audio API in your browser.</p>
   <div style="display:flex; gap:12px; justify-content:center; margin-top:16px;">
