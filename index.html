@@ -543,11 +543,12 @@ main{min-height:60vh;}
 
 /* ---------- QUOTES ---------- */
 .quotes-app{
-  min-height:82vh;display:flex;flex-direction:column;justify-content:center;
-  align-items:center;gap:var(--space-4);padding-block:var(--space-4);
+  height:clamp(280px, calc(100dvh - 340px), 760px);
+  display:flex;flex-direction:column;justify-content:center;
+  align-items:center;gap:var(--space-3);padding-block:var(--space-2);
 }
 .quotes-stage{
-  align-self:center;width:100vw;padding-inline:clamp(10px,3vw,40px);
+  flex:1;min-height:0;align-self:center;width:100vw;padding-inline:clamp(10px,3vw,40px);
   display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
 }
 .quotes-nav{
@@ -558,8 +559,8 @@ main{min-height:60vh;}
 }
 .quotes-nav:hover{border-color:var(--color-accent);color:var(--color-accent);background:var(--color-accent-bg);}
 .quotes-box{
-  flex:1;display:flex;align-items:center;justify-content:center;
-  min-height:56vh;text-align:center;padding:var(--space-5);
+  flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:var(--space-4);
 }
 .quotes-text{
   font-family:'Arbutus Slab',var(--font-heading);font-size:1.5rem;
