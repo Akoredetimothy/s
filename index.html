@@ -17,7 +17,7 @@
 <title>Akorede Adetola — Research</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single&family=Quantico:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Arbutus+Slab&family=Bitcount+Single&family=Quantico:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ===================================================================
    PERSONAL RESEARCH SITE — "N10 × NOKIAFLUX"
@@ -435,7 +435,8 @@ main{min-height:60vh;}
 .tilegrid .tile__icon{
   stroke:#ffffff !important;
 }
-.tile--live{
+.tile--live,
+.tile--dark{
   background:#131313 !important;
   border-color:#2a2a2a !important;
 }
@@ -553,10 +554,13 @@ main{min-height:60vh;}
   transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast);
 }
 .quotes-nav:hover{border-color:var(--color-accent);color:var(--color-accent);background:var(--color-accent-bg);}
+.quotes-box{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  min-height:190px;text-align:center;padding:var(--space-4);
+}
 .quotes-text{
-  flex:1;text-align:center;margin:0;padding:0 var(--space-2);
-  font-family:var(--font-heading);font-size:clamp(1.1rem,3vw,1.75rem);
-  line-height:1.5;color:var(--color-text);max-width:62ch;
+  font-family:'Arbutus Slab',var(--font-heading);font-size:1.5rem;
+  line-height:1.5;color:var(--color-text);margin:0;max-width:62ch;
 }
 .quotes-source{font-family:var(--font-mono);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);}
 .quotes-slider{display:flex;gap:6px;max-width:100%;overflow-x:auto;padding:6px 2px;scrollbar-width:thin;}
@@ -1274,6 +1278,8 @@ function renderQuote(){
   const q = QUOTES[quoteIndex];
   if(!q) return;
   text.textContent = q.text;
+  const len = q.text.length;
+  text.style.fontSize = Math.max(1.05, Math.min(1.95, 2.45 - len / 95)).toFixed(2) + 'rem';
   source.textContent = q.author;
   document.querySelectorAll('.quotes-tab').forEach((b,i)=>b.classList.toggle('active', i === quoteIndex));
 }

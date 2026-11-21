@@ -3,7 +3,7 @@
 <div class="quotes-app" id="quotesApp">
   <div class="quotes-stage">
     <button class="quotes-nav quotes-nav--prev" id="quotePrev" type="button" aria-label="Previous quote">&lsaquo;</button>
-    <div class="quotes-text" id="quoteText"></div>
+    <div class="box quotes-box"><div class="quotes-text" id="quoteText"></div></div>
     <button class="quotes-nav quotes-nav--next" id="quoteNext" type="button" aria-label="Next quote">&rsaquo;</button>
   </div>
   <div class="quotes-source" id="quoteSource"></div>
