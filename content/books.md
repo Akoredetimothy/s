@@ -1,9 +1,41 @@
 # Books
 
-> A curated collection of essential reading on Machine Learning, Scientific Computing, Systems Architecture, and Mechanical Physics. Each entry is a full note in `books/` — drop a new markdown file there and it appears here automatically.
+A list of books I find interesting.
 
-* [Deep Learning](#books/deep-learning) — March 10, 2026
-* [Dive into Deep Learning](#books/dive-into-deep-learning) — April 2, 2026
-* [Physically Based Rendering](#books/physically-based-rendering) — May 15, 2026
-* [Data-Driven Science and Engineering](#books/data-driven-science-engineering) — February 20, 2026
-* [The Feynman Lectures on Physics](#books/the-feynman-lectures) — January 8, 2026
+<div class="list">
+  <div class="list-item">
+    <svg class="list-item__icon"><use href="#i-book"/></svg>
+    <div>
+      <div class="list-item__title">Deep Learning</div>
+      <div class="list-item__desc">Ian Goodfellow, Yoshua Bengio, Aaron Courville</div>
+    </div>
+  </div>
+  <div class="list-item">
+    <svg class="list-item__icon"><use href="#i-book"/></svg>
+    <div>
+      <div class="list-item__title">Dive into Deep Learning</div>
+      <div class="list-item__desc">Aston Zhang, Zachary Lipton, Mu Li, Alex Smola</div>
+    </div>
+  </div>
+  <div class="list-item">
+    <svg class="list-item__icon"><use href="#i-book"/></svg>
+    <div>
+      <div class="list-item__title">Physically Based Rendering</div>
+      <div class="list-item__desc">Matt Pharr, Wenzel Jakob, Greg Humphreys</div>
+    </div>
+  </div>
+  <div class="list-item">
+    <svg class="list-item__icon"><use href="#i-book"/></svg>
+    <div>
+      <div class="list-item__title">Data-Driven Science and Engineering</div>
+      <div class="list-item__desc">Steven L. Brunton, J. Nathan Kutz</div>
+    </div>
+  </div>
+  <div class="list-item">
+    <svg class="list-item__icon"><use href="#i-book"/></svg>
+    <div>
+      <div class="list-item__title">The Feynman Lectures on Physics</div>
+      <div class="list-item__desc">Richard P. Feynman, Robert B. Leighton, Matthew Sands</div>
+    </div>
+  </div>
+</div>
