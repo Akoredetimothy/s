@@ -35,10 +35,6 @@
       <span class="tile__sub" style="font-weight: 700; font-size: .65rem; letter-spacing: 1px; color: #ffffff;">tap to view</span>
     </div>
   </a>
-  <a class="tile tile--a3" href="#gallery">
-    <svg class="tile__icon"><use href="#i-gallery"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Gallery</span>
-  </a>
   <a class="tile tile--a4" href="#games">
     <svg class="tile__icon"><use href="#i-game"/></svg>
     <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Games</span>
@@ -49,7 +45,11 @@
   </a>
   <a class="tile tile--dark" href="#quotes">
     <svg class="tile__icon"><use href="#i-quote"/></svg>
-    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Quotes</span>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Snippets</span>
+  </a>
+  <a class="tile tile--a3" href="#gallery">
+    <svg class="tile__icon"><use href="#i-gallery"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Gallery</span>
   </a>
 </div>
 
