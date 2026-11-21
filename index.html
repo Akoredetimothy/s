@@ -540,6 +540,35 @@ main{min-height:60vh;}
 }
 .lightbox__close:hover{border-color:var(--color-accent);color:var(--color-accent);}
 
+/* ---------- QUOTES ---------- */
+.quotes-app{
+  min-height:56vh;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;gap:var(--space-4);padding-block:var(--space-4);
+}
+.quotes-stage{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);}
+.quotes-nav{
+  flex:0 0 46px;width:46px;height:46px;line-height:1;
+  background:var(--color-surface);border:1px solid var(--color-border-strong);
+  color:var(--color-text);font-size:2rem;cursor:pointer;
+  transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast);
+}
+.quotes-nav:hover{border-color:var(--color-accent);color:var(--color-accent);background:var(--color-accent-bg);}
+.quotes-text{
+  flex:1;text-align:center;margin:0;padding:0 var(--space-2);
+  font-family:var(--font-heading);font-size:clamp(1.1rem,3vw,1.75rem);
+  line-height:1.5;color:var(--color-text);max-width:62ch;
+}
+.quotes-source{font-family:var(--font-mono);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);}
+.quotes-slider{display:flex;gap:6px;max-width:100%;overflow-x:auto;padding:6px 2px;scrollbar-width:thin;}
+.quotes-tab{
+  flex:0 0 auto;white-space:nowrap;cursor:pointer;
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;
+  padding:7px 12px;border:1px solid var(--color-border);
+  background:var(--color-surface-alt);color:var(--color-text-dim);
+  transition:border-color var(--t-fast),color var(--t-fast);
+}
+.quotes-tab:hover,.quotes-tab.active{border-color:var(--color-accent);color:var(--color-accent);}
+
 /* ---------- GAME ARCADE BOX ---------- */
 .game-box{
   background:#131313 !important;
@@ -731,6 +760,7 @@ footer p{margin:0;font-size:.8rem;}
     <symbol id="i-gallery" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.5" fill="none" stroke-width="1.5"/><path d="M21 15l-5-5-11 11" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-game" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4" fill="none" stroke-width="1.5"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01" fill="none" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-mix" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M10 7c-2.8 0-5 2.2-5 5v5h6v-6H8c0-1.2.8-2 2-2zM20 7c-2.8 0-5 2.2-5 5v5h6v-6h-3c0-1.2.8-2 2-2z" fill="none" stroke-width="1.5" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
 
@@ -845,6 +875,7 @@ const ROUTES = {
   publications: { file:'content/publications.md', bleed:'PAPERS',   eyebrow:'07 PUBLICATIONS', note:'papers, preprints and talks',          title:'Publications' },
   blog:         { file:null,                      bleed:'NOTES',    eyebrow:'08 BLOG',         note:'research notebook — auto-indexed',     title:'Blog' },
   cv:           { file:'content/cv.md',           bleed:'RECORD',   eyebrow:'09 CV',           note:'education, experience and service',    title:'Curriculum Vitae' },
+  quotes:       { file:'content/quotes.md',       bleed:'QUOTES',   eyebrow:'10 QUOTES',       note:'a small collection of quotes',        title:'Quotes' },
   scholar:      { file:'content/soon.md',         bleed:'SCHOLAR',  eyebrow:'LINK 01',         note:'not yet online — check back later',    title:'Google Scholar' },
   orcid:        { file:'content/soon.md',         bleed:'ORCID',    eyebrow:'LINK 02',         note:'not yet online — check back later',    title:'ORCID' },
 };
@@ -950,6 +981,7 @@ async function renderPage(key){
     if(title) setHead(key, key === 'home' ? title : (r.title || title));
     content.innerHTML = parseMD(md);
     executeScripts(content);
+    if(key === 'quotes') initQuotes();
   }catch(err){
     renderError(key, err);
   }
@@ -1231,6 +1263,46 @@ document.addEventListener('keydown', e=>{
     e.preventDefault();
     document.activeElement.click();
   }
+});
+
+/* quotes carousel */
+let QUOTES = [], quoteIndex = 0;
+function renderQuote(){
+  const text = document.getElementById('quoteText');
+  const source = document.getElementById('quoteSource');
+  if(!text || !source) return;
+  const q = QUOTES[quoteIndex];
+  if(!q) return;
+  text.textContent = q.text;
+  source.textContent = q.author;
+  document.querySelectorAll('.quotes-tab').forEach((b,i)=>b.classList.toggle('active', i === quoteIndex));
+}
+function initQuotes(){
+  QUOTES = Array.from(document.querySelectorAll('#quotesData .quote-item')).map(el=>({
+    title: el.dataset.title || '',
+    author: el.dataset.author || '',
+    text: el.textContent.trim()
+  }));
+  quoteIndex = 0;
+  const slider = document.getElementById('quoteSlider');
+  if(slider) slider.innerHTML = QUOTES.map((q,i)=>`<button class="quotes-tab" type="button" data-index="${i}">${esc(q.title)}</button>`).join('');
+  renderQuote();
+}
+document.addEventListener('click', e=>{
+  const prev = e.target.closest('#quotePrev');
+  const next = e.target.closest('#quoteNext');
+  const tab = e.target.closest('.quotes-tab');
+  if(!prev && !next && !tab) return;
+  if(!QUOTES.length) return;
+  if(prev) quoteIndex = (quoteIndex - 1 + QUOTES.length) % QUOTES.length;
+  else if(next) quoteIndex = (quoteIndex + 1) % QUOTES.length;
+  else quoteIndex = Number(tab.dataset.index);
+  renderQuote();
+});
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('quotesApp') || !QUOTES.length) return;
+  if(e.key === 'ArrowLeft'){ quoteIndex = (quoteIndex - 1 + QUOTES.length) % QUOTES.length; renderQuote(); }
+  if(e.key === 'ArrowRight'){ quoteIndex = (quoteIndex + 1) % QUOTES.length; renderQuote(); }
 });
 
 /* footer year */

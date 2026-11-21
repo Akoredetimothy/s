@@ -47,6 +47,10 @@
     <svg class="tile__icon"><use href="#i-mix"/></svg>
     <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Mix</span>
   </a>
+  <a class="tile" href="#quotes">
+    <svg class="tile__icon"><use href="#i-quote"/></svg>
+    <span class="tile__label" style="font-weight: 900; font-size: 1.4rem; color: #ffffff;">Quotes</span>
+  </a>
 </div>
 
 ## Research Interests
