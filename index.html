@@ -447,19 +447,24 @@ main{min-height:60vh;}
 
 /* ---------- GALLERY GRID ---------- */
 .gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-  gap:4px;
+  --row-h:180px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:0 4px;
   margin-bottom:var(--space-5);
 }
+@media(max-width:600px){ .gallery-grid{ --row-h:130px; } }
 .gallery-card{
+  height:var(--row-h);
+  flex:1 1 calc(var(--ratio, 1) * var(--row-h));
+  min-width:0;
   background:transparent;
   border:none !important;
   border-radius:0;
   overflow:hidden;
   position:relative;
   outline:none;
-  cursor:pointer;
+  cursor:zoom-in;
   transition:outline-color 0.2s ease;
 }
 .gallery-card:hover,
@@ -471,7 +476,7 @@ main{min-height:60vh;}
 }
 .gallery-card__img{
   width:100%;
-  aspect-ratio:16/10;
+  height:100%;
   object-fit:cover;
   display:block;
   border:none !important;
@@ -519,12 +524,21 @@ main{min-height:60vh;}
   letter-spacing:.5px;
   text-shadow:0 2px 4px rgba(0,0,0,0.6);
 }
-.gallery-card__desc{
-  font-size:.82rem;
-  color:rgba(255,255,255,0.85) !important;
-  line-height:1.4;
-  text-shadow:0 1px 3px rgba(0,0,0,0.7);
+
+/* ---------- LIGHTBOX ---------- */
+.lightbox{
+  position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.93);
+  display:none;align-items:center;justify-content:center;flex-direction:column;
+  gap:14px;padding:48px 24px 24px;cursor:zoom-out;
 }
+.lightbox.open{display:flex;}
+.lightbox img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border:1px solid var(--color-border);}
+.lightbox__title{font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-text-dim);text-align:center;}
+.lightbox__close{
+  position:absolute;top:16px;right:20px;width:38px;height:38px;line-height:1;
+  background:none;border:1px solid var(--color-border-strong);color:#fff;font-size:1.4rem;cursor:pointer;
+}
+.lightbox__close:hover{border-color:var(--color-accent);color:var(--color-accent);}
 
 /* ---------- GAME ARCADE BOX ---------- */
 .game-box{
@@ -797,6 +811,12 @@ footer p{margin:0;font-size:.8rem;}
 </footer>
 
 <div class="toast" id="toast"></div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox__close" id="lightboxClose" aria-label="Close image">&times;</button>
+  <img id="lightboxImg" alt="">
+  <div class="lightbox__title" id="lightboxTitle"></div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script>
@@ -1181,6 +1201,37 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     });
   }, 4000);
 }
+
+/* gallery lightbox */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxTitle = document.getElementById('lightboxTitle');
+function closeLightbox(){
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden','true');
+  lightboxImg.removeAttribute('src');
+}
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e=>{ if(e.target === lightbox) closeLightbox(); });
+document.addEventListener('click', e=>{
+  const card = e.target.closest('.gallery-card');
+  if(!card) return;
+  const img = card.querySelector('.gallery-card__img');
+  if(!img) return;
+  lightboxImg.src = img.src;
+  lightboxImg.alt = img.alt;
+  const title = card.querySelector('.gallery-card__title');
+  lightboxTitle.textContent = title ? title.textContent : img.alt;
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden','false');
+});
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+  if((e.key === 'Enter' || e.key === ' ') && document.activeElement && document.activeElement.classList.contains('gallery-card')){
+    e.preventDefault();
+    document.activeElement.click();
+  }
+});
 
 /* footer year */
 document.getElementById('year').textContent = new Date().getFullYear();
