@@ -564,7 +564,7 @@ main{min-height:60vh;}
 }
 .quotes-text{
   font-family:'Arbutus Slab',var(--font-heading);font-size:1.5rem;
-  line-height:1.5;color:var(--color-text);margin:0;max-width:62ch;
+  line-height:1.5;color:var(--color-text);margin:0;max-width:62ch;white-space:pre-line;
 }
 .quotes-source{font-family:var(--font-mono);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);}
 .quotes-slider{display:flex;gap:6px;max-width:100%;overflow-x:auto;padding:6px 2px;scrollbar-width:thin;}
@@ -1283,7 +1283,7 @@ function renderQuote(){
   if(!q) return;
   text.textContent = q.text;
   const len = q.text.length;
-  text.style.fontSize = Math.max(1.15, Math.min(2.6, 3.2 - len / 90)).toFixed(2) + 'rem';
+  text.style.fontSize = Math.max(0.85, Math.min(2.6, 3.1 - len / 120)).toFixed(2) + 'rem';
   source.textContent = q.author;
   document.querySelectorAll('.quotes-tab').forEach((b,i)=>b.classList.toggle('active', i === quoteIndex));
 }
