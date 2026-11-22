@@ -1286,10 +1286,11 @@ function fitQuote(){
   const availH = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4;
   const availW = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 4;
   if(availH <= 0 || availW <= 0) return;
-  let size = 4;
-  text.style.fontSize = size + 'rem';
+  const len = text.textContent.length;
+  let size = Math.max(1.1, Math.min(3.4, 3.6 - len / 250));
+  text.style.fontSize = size.toFixed(2) + 'rem';
   let guard = 0;
-  while((text.scrollHeight > availH || text.scrollWidth > availW) && size > 0.7 && guard++ < 100){
+  while((text.scrollHeight > availH || text.scrollWidth > availW) && size > 1.1 && guard++ < 60){
     size -= 0.06;
     text.style.fontSize = size.toFixed(2) + 'rem';
   }
