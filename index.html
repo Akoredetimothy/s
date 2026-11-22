@@ -542,10 +542,12 @@ main{min-height:60vh;}
 .lightbox__close:hover{border-color:var(--color-accent);color:var(--color-accent);}
 
 /* ---------- QUOTES ---------- */
+body.route-quotes .page-head{padding:var(--space-2) 0 var(--space-1);}
+body.route-quotes footer{padding:var(--space-2) 0;}
 .quotes-app{
-  height:clamp(280px, calc(100dvh - 340px), 760px);
+  height:clamp(280px, calc(100dvh - 270px), 820px);
   display:flex;flex-direction:column;justify-content:center;
-  align-items:center;gap:var(--space-3);padding-block:var(--space-2);
+  align-items:center;gap:var(--space-2);padding-block:var(--space-1);
 }
 .quotes-stage{
   flex:1;min-height:0;align-self:center;width:100vw;padding-inline:clamp(10px,3vw,40px);
@@ -564,7 +566,7 @@ main{min-height:60vh;}
 }
 .quotes-text{
   font-family:'Arbutus Slab',var(--font-heading);font-size:1.5rem;
-  line-height:1.5;color:var(--color-text);margin:0;max-width:62ch;white-space:pre-line;
+  line-height:1.5;color:var(--color-text);margin:0;width:100%;max-width:100%;white-space:pre-line;
 }
 .quotes-source{font-family:var(--font-mono);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);}
 .quotes-slider{display:flex;gap:6px;max-width:100%;overflow-x:auto;padding:6px 2px;scrollbar-width:thin;}
@@ -1153,6 +1155,7 @@ const COLLECTIONS = {
    =================================================================== */
 function route(){
   const hash = (location.hash || '#home').slice(1);
+  document.body.classList.toggle('route-quotes', hash === 'quotes');
   if(hash.startsWith('blog/')){
     const slug = decodeURIComponent(hash.slice(5).replace(/\/+$/,''));
     if(slug) return renderCollectionEntry('blog', COLLECTIONS.blog, slug);
@@ -1275,6 +1278,22 @@ document.addEventListener('keydown', e=>{
 
 /* quotes carousel */
 let QUOTES = [], quoteIndex = 0;
+function fitQuote(){
+  const box = document.querySelector('.quotes-box');
+  const text = document.getElementById('quoteText');
+  if(!box || !text) return;
+  const cs = getComputedStyle(box);
+  const availH = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4;
+  const availW = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 4;
+  if(availH <= 0 || availW <= 0) return;
+  let size = 4;
+  text.style.fontSize = size + 'rem';
+  let guard = 0;
+  while((text.scrollHeight > availH || text.scrollWidth > availW) && size > 0.7 && guard++ < 100){
+    size -= 0.06;
+    text.style.fontSize = size.toFixed(2) + 'rem';
+  }
+}
 function renderQuote(){
   const text = document.getElementById('quoteText');
   const source = document.getElementById('quoteSource');
@@ -1282,8 +1301,7 @@ function renderQuote(){
   const q = QUOTES[quoteIndex];
   if(!q) return;
   text.textContent = q.text;
-  const len = q.text.length;
-  text.style.fontSize = Math.max(0.85, Math.min(2.6, 3.1 - len / 120)).toFixed(2) + 'rem';
+  fitQuote();
   source.textContent = q.author;
   document.querySelectorAll('.quotes-tab').forEach((b,i)=>b.classList.toggle('active', i === quoteIndex));
 }
@@ -1314,6 +1332,7 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'ArrowLeft'){ quoteIndex = (quoteIndex - 1 + QUOTES.length) % QUOTES.length; renderQuote(); }
   if(e.key === 'ArrowRight'){ quoteIndex = (quoteIndex + 1) % QUOTES.length; renderQuote(); }
 });
+window.addEventListener('resize', ()=>{ if(document.getElementById('quotesApp')) fitQuote(); });
 
 /* footer year */
 document.getElementById('year').textContent = new Date().getFullYear();
