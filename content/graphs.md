@@ -20,10 +20,23 @@
   const accent = '#00A4EF';
   const baseY = H * 0.78;
   const cols = 20, rows = 8;
+  const pointer = { x:W*0.5, y:H*0.5, active:false, down:false };
+  let burst = 0;
 
   const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
   const ss = (a,b,x)=>{ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); };
   const hash = n=>{ const x=Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+
+  function setPointer(e){
+    const r = canvas.getBoundingClientRect();
+    pointer.x = (e.clientX-r.left)/r.width*W;
+    pointer.y = (e.clientY-r.top)/r.height*H;
+    pointer.active = true;
+  }
+  canvas.addEventListener('pointermove', setPointer);
+  canvas.addEventListener('pointerleave', ()=>{ pointer.active=false; pointer.down=false; });
+  canvas.addEventListener('pointerdown', e=>{ setPointer(e); pointer.down=true; burst=1; });
+  window.addEventListener('pointerup', ()=>{ pointer.down=false; });
 
   function mountainY(i){
     const t = i/20;
@@ -109,77 +122,151 @@
     }
   }
 
+  function leaf(x,y,dir,grow){
+    const len = 13*grow, wide = 5*grow;
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(dir*0.4);
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.bezierCurveTo(dir*wide,-len*0.25, dir*wide,-len*0.8, 0,-len);
+    ctx.bezierCurveTo(-dir*wide*0.4,-len*0.8, -dir*wide*0.35,-len*0.25, 0,0);
+    ctx.closePath();
+    const g = ctx.createLinearGradient(0,0,0,-len);
+    g.addColorStop(0,'rgba(60,120,20,0.85)');
+    g.addColorStop(1,'rgba(160,220,60,0.75)');
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(220,255,170,0.45)';
+    ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-len*0.9); ctx.stroke();
+    ctx.restore();
+  }
+
+  function petal(len,wid,inner){
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.bezierCurveTo(wid*0.65,-len*0.22, wid*0.55,-len*0.78, 0,-len);
+    ctx.bezierCurveTo(-wid*0.55,-len*0.78, -wid*0.65,-len*0.22, 0,0);
+    ctx.closePath();
+    const g = ctx.createLinearGradient(0,0,0,-len);
+    if(inner){
+      g.addColorStop(0,'rgba(255,150,60,0.95)');
+      g.addColorStop(1,'rgba(255,220,120,0.9)');
+    }else{
+      g.addColorStop(0,'rgba(200,50,30,0.95)');
+      g.addColorStop(0.65,'rgba(242,80,34,0.9)');
+      g.addColorStop(1,'rgba(255,183,77,0.8)');
+    }
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,225,180,0.35)';
+    ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(0,-len*0.1); ctx.lineTo(0,-len*0.85); ctx.stroke();
+  }
+
   function drawFlower(p,t){
     const grow = ss(0.32,0.6,p);
     if(grow<=0) return null;
-    const open = ss(0.6,0.78,p);
+    const baseOpen = ss(0.6,0.78,p);
     const baseX = W*0.5;
     const stemH = grow*H*0.46;
-    const sway = Math.sin(t*1.4)*7*grow;
+    const wind = Math.sin(t*1.4)*6*grow;
+    const dist = pointer.active ? Math.hypot(pointer.x-baseX, pointer.y-(baseY-stemH)) : 999;
+    const near = clamp(1-dist/170,0,1);
+    const lean = clamp((pointer.x-baseX)/W*2,-1,1)*near*16;
+    const sway = wind+lean+(pointer.down?lean*0.5:0);
     const fx = baseX+sway;
-    const fy = baseY-stemH;
+    const fy = baseY-stemH-lean*0.15;
+    const open = clamp(baseOpen + near*0.3 + (pointer.down?0.35:0), 0, 1);
 
+    const glow = ctx.createRadialGradient(fx,fy,2,fx,fy,52);
+    glow.addColorStop(0,'rgba(255,183,77,'+(0.16*open)+')');
+    glow.addColorStop(1,'rgba(255,183,77,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(fx-56,fy-56,112,112);
+
+    const sg = ctx.createLinearGradient(baseX,baseY,fx,fy);
+    sg.addColorStop(0,'#3f7a12');
+    sg.addColorStop(1,'#9fd83c');
     ctx.beginPath();
     ctx.moveTo(baseX,baseY);
-    ctx.quadraticCurveTo(baseX+sway*0.4, baseY-stemH*0.55, fx, fy);
-    ctx.strokeStyle = '#7FBA00';
-    ctx.lineWidth = 2.4;
+    ctx.quadraticCurveTo(baseX+sway*0.35, baseY-stemH*0.55, fx, fy);
+    ctx.strokeStyle = sg;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
     ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(baseX-0.6,baseY);
+    ctx.quadraticCurveTo(baseX+sway*0.35-0.6, baseY-stemH*0.55, fx-0.6, fy);
+    ctx.strokeStyle = 'rgba(220,255,170,0.35)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+
+    leaf(baseX, baseY-stemH*0.42, -1, grow);
+    leaf(baseX, baseY-stemH*0.6, 1, grow*0.85);
 
     if(grow<1){
       ctx.strokeStyle = 'rgba(255,255,255,0.32)';
       ctx.lineWidth = 1;
-      ctx.beginPath();
-      for(let k=0;k<44;k++){
-        const q = k/43;
-        const ang = q*Math.PI*4 + t*2;
-        const rad = q*19;
-        const x = fx+Math.cos(ang)*rad;
-        const y = fy+Math.sin(ang)*rad;
-        if(k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      for(let arm=0;arm<2;arm++){
+        ctx.beginPath();
+        for(let k=0;k<44;k++){
+          const q = k/43;
+          const ang = q*Math.PI*4 + t*2 + arm*Math.PI;
+          const rad = q*20;
+          const x = fx+Math.cos(ang)*rad;
+          const y = fy+Math.sin(ang)*rad;
+          if(k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.stroke();
       }
-      ctx.stroke();
     }
 
-    for(const s of [-1,1]){
-      ctx.beginPath();
-      ctx.ellipse(baseX+s*10, baseY-stemH*0.45, 10, 4, s*0.5, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(127,186,0,0.55)';
-      ctx.fill();
-    }
-
-    const petals = 7;
-    const pr = 4+open*15;
-    for(let i=0;i<petals;i++){
-      const ang = (i/petals)*Math.PI*2 + t*0.25;
-      const px = fx+Math.cos(ang)*pr*0.55;
-      const py = fy+Math.sin(ang)*pr*0.55;
+    const spin = t*(0.22+near*0.5);
+    const outerLen = 9+open*15;
+    for(let i=0;i<8;i++){
+      const ang = (i/8)*Math.PI*2 + spin + Math.sin(t*3+i)*0.04*near;
       ctx.save();
-      ctx.translate(px,py);
-      ctx.rotate(ang);
-      ctx.beginPath();
-      ctx.ellipse(0,0, pr*(0.45+open*0.55), pr*0.36, 0, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(242,80,34,'+(0.35+open*0.5)+')';
-      ctx.fill();
+      ctx.translate(fx,fy);
+      ctx.rotate(ang+Math.PI/2);
+      petal(outerLen, 6+open*3, false);
       ctx.restore();
     }
-    ctx.beginPath();
-    ctx.arc(fx,fy,3.5+open*2,0,Math.PI*2);
-    ctx.fillStyle = '#FFB900';
-    ctx.fill();
+    for(let i=0;i<6;i++){
+      const ang = (i/6)*Math.PI*2 - spin*0.6 + Math.PI/6;
+      ctx.save();
+      ctx.translate(fx,fy);
+      ctx.rotate(ang+Math.PI/2);
+      petal(outerLen*0.62, 5+open*2, true);
+      ctx.restore();
+    }
+
+    const cr = 3+open*3;
+    ctx.beginPath(); ctx.arc(fx,fy,cr,0,Math.PI*2);
+    ctx.fillStyle = '#5a2a0b'; ctx.fill();
+    for(let k=0;k<26;k++){
+      const r = Math.sqrt(k/26)*cr*0.9;
+      const a = k*2.399;
+      ctx.beginPath();
+      ctx.arc(fx+Math.cos(a)*r, fy+Math.sin(a)*r, 0.7+hash(k)*0.6, 0, Math.PI*2);
+      ctx.fillStyle = k%3===0 ? '#ffe08a' : '#ffc033';
+      ctx.fill();
+    }
     return {x:fx, y:fy};
   }
 
   function drawSeeds(p,fx,fy){
     const a = ss(0.78,0.96,p);
-    if(a<=0 || fx==null) return;
+    const total = clamp(a+burst*0.6,0,1);
+    if(total<=0 || fx==null) return;
     for(let i=0;i<30;i++){
       const ang = hash(i)*Math.PI*2;
       const sp = 50+hash(i+40)*110;
-      const d = a*sp;
+      const d = total*sp;
       const x = fx+Math.cos(ang)*d;
-      const y = fy+Math.sin(ang)*d + a*a*55;
-      ctx.globalAlpha = (1-a)*0.9;
+      const y = fy+Math.sin(ang)*d + total*total*55;
+      ctx.globalAlpha = (1-total)*0.9;
       ctx.fillStyle = '#FFB900';
       ctx.beginPath();
       ctx.ellipse(x,y,2.4,1.2,ang,0,Math.PI*2);
@@ -187,10 +274,10 @@
       for(let j=0;j<2;j++){
         const ja = ang + (hash(i*7+j)-0.5)*0.8;
         const jd = d*(1.1+hash(j+i)*0.5);
-        ctx.globalAlpha = (1-a)*0.32;
+        ctx.globalAlpha = (1-total)*0.32;
         ctx.fillStyle = '#cfd8e3';
         ctx.beginPath();
-        ctx.arc(fx+Math.cos(ja)*jd, fy+Math.sin(ja)*jd+a*a*70, 1+hash(i+j)*1.6, 0, Math.PI*2);
+        ctx.arc(fx+Math.cos(ja)*jd, fy+Math.sin(ja)*jd+total*total*70, 1+hash(i+j)*1.6, 0, Math.PI*2);
         ctx.fill();
       }
     }
@@ -203,6 +290,8 @@
     requestAnimationFrame(draw);
     const t = now/1000;
     const p = (t%14)/14;
+    burst *= 0.965;
+    if(burst<0.01) burst=0;
     ctx.fillStyle = '#090d12';
     ctx.fillRect(0,0,W,H);
     drawSky(p,t);
