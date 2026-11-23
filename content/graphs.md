@@ -1,6 +1,6 @@
 # Generative Bloom
 
-> A living field: points resolve into a mountain ridge, sky drifts overhead, and a finely connected bloom unfurls to scatter its seeds into the wind. Move across the canvas to lean the flower; click to release a fresh burst.
+> A living field: points resolve into a mountain ridge, sky drifts overhead, and an ancient Roman warrior steps into the frame with sword raised and shield at the ready. Move across the canvas to shift the figure; click to stir a burst of dust.
 
 <div class="bloom-stage">
   <div class="bloom-stage__frame">
@@ -12,14 +12,14 @@
   </div>
   <div class="bloom-stage__bar">
     <div class="bloom-steps">
-      <span class="active">Field</span><span>Ridge</span><span>Bloom</span><span>Release</span><span>Drift</span>
+      <span class="active">Field</span><span>Ridge</span><span>Warrior</span><span>Reveal</span><span>Dust</span>
     </div>
     <div class="bloom-stage__actions">
       <button type="button" id="bloomPause">Pause</button>
       <button type="button" id="bloomReset">Restart</button>
     </div>
   </div>
-  <p class="bloom-stage__hint">Move across the scene to lean the bloom &middot; click to scatter seeds</p>
+  <p class="bloom-stage__hint">Move across the scene to shift the figure &middot; click to stir the dust</p>
 </div>
 
 <script>
@@ -46,9 +46,9 @@
   const PHASES = [
     { at:0,    name:'Point field' },
     { at:0.16, name:'Mountain ridge' },
-    { at:0.38, name:'The bloom' },
-    { at:0.6,  name:'Petal opening' },
-    { at:0.72, name:'Seed dispersal' }
+    { at:0.34, name:'The warrior' },
+    { at:0.6,  name:'Reveal' },
+    { at:0.72, name:'Dust & dispersal' }
   ];
   let particles = [], seedSpawned = false, lastCycle = -1;
   let simTime = 0, paused = false, stepIndex = -1;
@@ -224,207 +224,34 @@
     }
   }
 
-  const TAU = Math.PI*2;
+  const warrior = new Image();
+  warrior.src = 'images/roman-warrior.svg';
 
-  function edgeSet(nodes, cols, maxDist){
-    const out = [];
-    for(let a=0;a<nodes.length;a++){
-      const ar=Math.floor(a/cols), ac=a%cols;
-      for(let b=a+1;b<nodes.length;b++){
-        const br=Math.floor(b/cols), bc=b%cols;
-        const d=Math.max(Math.abs(ar-br),Math.abs(ac-bc));
-        if(d<=maxDist) out.push([a,b,d]);
-      }
-    }
-    return out;
-  }
-
-  function drawMesh(nodes, cols, maxDist, rgb, alpha, width, reveal){
-    const edges = edgeSet(nodes, cols, maxDist);
-    const shown = clamp(reveal,0,1);
-    ctx.lineWidth = width;
-    for(let d=1;d<=maxDist;d++){
-      const a = alpha*(1-((d-1)/(maxDist+1))*0.5);
-      ctx.strokeStyle = 'rgba('+rgb+','+a.toFixed(3)+')';
-      ctx.beginPath();
-      let any = false;
-      for(const [i,j,dd] of edges){
-        if(dd!==d || (i+1)/nodes.length>shown) continue;
-        ctx.moveTo(nodes[i].x,nodes[i].y);
-        ctx.lineTo(nodes[j].x,nodes[j].y);
-        any = true;
-      }
-      if(any) ctx.stroke();
-    }
-    ctx.fillStyle = 'rgba(255,246,224,'+Math.min(1,alpha*1.7)+')';
-    for(let i=0;i<nodes.length;i++){
-      if((i+1)/nodes.length>shown) continue;
-      ctx.beginPath(); ctx.arc(nodes[i].x,nodes[i].y,1.15,0,TAU); ctx.fill();
-    }
-  }
-
-  function drawWeb(nodes, k, alpha, reveal){
-    const shown = clamp(reveal,0,1);
-    ctx.lineWidth = 0.8;
-    ctx.strokeStyle = 'rgba(255,205,110,'+alpha+')';
-    ctx.beginPath();
-    for(let i=0;i<nodes.length;i++){
-      if((i+1)/nodes.length>shown) continue;
-      const near=[];
-      for(let j=0;j<nodes.length;j++){
-        if(i===j) continue;
-        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
-        near.push([dx*dx+dy*dy,j]);
-      }
-      near.sort((a,b)=>a[0]-b[0]);
-      for(let n=0;n<Math.min(k,near.length);n++){
-        const j=near[n][1];
-        if(j<i || (j+1)/nodes.length>shown) continue;
-        ctx.moveTo(nodes[i].x,nodes[i].y);
-        ctx.lineTo(nodes[j].x,nodes[j].y);
-      }
-    }
-    ctx.stroke();
-    ctx.fillStyle = '#ffe6a0';
-    for(let i=0;i<nodes.length;i++){
-      if((i+1)/nodes.length>shown) continue;
-      ctx.beginPath(); ctx.arc(nodes[i].x,nodes[i].y,1.25,0,TAU); ctx.fill();
-    }
-  }
-
-  function petal(len,wid,kind){
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.bezierCurveTo(wid*0.7,-len*0.2, wid*0.58,-len*0.76, 0,-len);
-    ctx.bezierCurveTo(-wid*0.58,-len*0.76, -wid*0.7,-len*0.2, 0,0);
-    ctx.closePath();
-    const g = ctx.createLinearGradient(0,0,0,-len);
-    if(kind===2){ g.addColorStop(0,'#ff9a3c'); g.addColorStop(1,'#ffe9a8'); }
-    else if(kind===1){ g.addColorStop(0,'#e8531f'); g.addColorStop(0.7,'#ff9d43'); g.addColorStop(1,'#ffd98a'); }
-    else { g.addColorStop(0,'#a52116'); g.addColorStop(0.55,'#ef5b28'); g.addColorStop(1,'#ffb45c'); }
-    ctx.globalAlpha = 0.16;
-    ctx.fillStyle = g;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  function ribbonNodes(x0,y0,cx,cy,x1,y1,grow){
-    const nodes=[], N=18;
-    for(let i=0;i<N;i++){
-      const q=i/(N-1);
-      const x=(1-q)*(1-q)*x0 + 2*(1-q)*q*cx + q*q*x1;
-      const y=(1-q)*(1-q)*y0 + 2*(1-q)*q*cy + q*q*y1;
-      const tx=2*(1-q)*(cx-x0)+2*q*(x1-cx);
-      const ty=2*(1-q)*(cy-y0)+2*q*(y1-cy);
-      const l=Math.hypot(tx,ty)||1;
-      const nx=-ty/l*2.4*grow, ny=tx/l*2.4*grow;
-      nodes.push({x:x+nx,y:y+ny},{x:x-nx,y:y-ny});
-    }
-    return nodes;
-  }
-
-  function latticeNodes(fx,fy,ang,len,wid,rows,cols){
-    const nodes=[];
-    for(let r=0;r<rows;r++){
-      const q=(r+1)/rows;
-      const w=wid*Math.sin(q*Math.PI)*0.95;
-      for(let c=0;c<cols;c++){
-        const off=(c-(cols-1)/2)*w;
-        nodes.push({
-          x:fx+Math.cos(ang)*len*q - Math.sin(ang)*off,
-          y:fy+Math.sin(ang)*len*q + Math.cos(ang)*off
-        });
-      }
-    }
-    return nodes;
-  }
-
-  function drawBloom(p,t){
-    const grow = ss(0.32,0.64,p);
-    if(grow<=0) return null;
-    const baseOpen = ss(0.6,0.8,p);
+  function drawWarrior(p,t){
+    if(!warrior.complete || !warrior.naturalWidth) return null;
+    const reveal = ss(0.34,0.6,p);
+    if(reveal<=0) return null;
     const baseX = W/2;
-    const baseH = H*0.86;
-    const stemH = grow*H*0.42;
-    const dist = pointer.active ? Math.hypot(pointer.x-baseX, pointer.y-(baseH-stemH)) : 999;
-    const near = clamp(1-dist/210,0,1);
-    const lean = clamp((pointer.x-baseX)/(W/2),-1,1)*near*22;
-    const sway = Math.sin(t*1.1)*8*grow + lean + pointer.impulse*Math.sin(t*9)*6;
-    const fx = baseX+sway;
-    const fy = baseH-stemH-lean*0.12;
-    const open = clamp(baseOpen + near*0.28 + pointer.impulse*0.35,0,1);
+    const baseY = H*0.9;
+    const dist = pointer.active ? Math.hypot(pointer.x-baseX, pointer.y-H*0.5) : 999;
+    const near = clamp(1-dist/230,0,1);
+    const lean = clamp((pointer.x-baseX)/(W/2),-1,1)*near*18;
+    const x = baseX+lean;
+    const h = 400*reveal;
+    const w = h*(800/560);
+    const y = baseY-h;
 
-    const glow = ctx.createRadialGradient(fx,fy,2,fx,fy,95);
-    glow.addColorStop(0,'rgba(255,186,96,'+(0.2*open)+')');
-    glow.addColorStop(1,'rgba(255,186,96,0)');
+    const glow = ctx.createRadialGradient(x,y+h*0.45,10,x,y+h*0.45,h*0.55);
+    glow.addColorStop(0,'rgba(255,200,120,'+(0.12+near*0.1)+')');
+    glow.addColorStop(1,'rgba(255,200,120,0)');
     ctx.fillStyle = glow;
-    ctx.fillRect(fx-100,fy-100,200,200);
+    ctx.fillRect(x-h,y,h*2,h);
 
-    const cx = baseX+sway*0.32, cy = baseH-stemH*0.55;
-    const stem = ribbonNodes(baseX,baseH,cx,cy,fx,fy,grow);
-    drawMesh(stem,2,2,'150,225,90',0.28,0.9,grow);
+    ctx.globalAlpha = reveal;
+    ctx.drawImage(warrior, x-w/2, y, w, h);
+    ctx.globalAlpha = 1;
 
-    for(const [ly,lh,ld,lw] of [
-      [baseH-stemH*0.4, 20*grow, -1, 8*grow],
-      [baseH-stemH*0.56, 18*grow, 1, 7*grow],
-      [baseH-stemH*0.24, 15*grow, 1, 6*grow]
-    ]){
-      const la = Math.atan2(-lh,ld*16)+Math.PI/2*ld;
-      const ln = latticeNodes(baseX,ly,la,lh*1.5,lw,4,3);
-      drawMesh(ln,3,2,'140,220,80',0.24,0.8,grow);
-    }
-
-    if(grow<1 || open>0.2){
-      ctx.strokeStyle = 'rgba(255,232,190,'+(grow<1?0.3:0.12)+')';
-      ctx.lineWidth=1.1;
-      for(let arm=0;arm<3;arm++){
-        ctx.beginPath();
-        for(let k=0;k<52;k++){
-          const q=k/51;
-          const ang=q*Math.PI*5 + t*1.7 + arm*Math.PI*2/3;
-          const rad=q*34*(1+open*0.4);
-          const x=fx+Math.cos(ang)*rad;
-          const y=fy+Math.sin(ang)*rad;
-          if(k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-        }
-        ctx.stroke();
-      }
-    }
-
-    const spin = t*(0.2+near*0.45) + pointer.impulse*t;
-    const rings = [
-      {n:9,  len:14+open*28, wid:9+open*8, kind:0, dir:1,   rgb:'255,120,70',  a:0.42},
-      {n:7,  len:11+open*21, wid:7+open*6, kind:1, dir:-0.65,rgb:'255,170,90',  a:0.5},
-      {n:5,  len:8+open*13,  wid:5+open*4, kind:2, dir:0.4,  rgb:'255,222,150', a:0.58}
-    ];
-    for(let ri=0;ri<rings.length;ri++){
-      const R=rings[ri];
-      for(let i=0;i<R.n;i++){
-        const ang=(i/R.n)*TAU + spin*R.dir + Math.sin(t*2.4+i*1.3+ri)*0.05*near;
-        ctx.save();
-        ctx.translate(fx,fy);
-        ctx.rotate(ang+Math.PI/2);
-        petal(R.len,R.wid,R.kind);
-        ctx.restore();
-        const nodes = latticeNodes(fx,fy,ang+Math.PI/2,R.len,R.wid,5,3);
-        drawMesh(nodes,3,2,R.rgb,R.a,0.9,Math.max(grow*0.35,open));
-      }
-    }
-
-    const cr=5+open*6;
-    const core=[];
-    for(let k=0;k<34;k++){
-      const r=Math.sqrt(k/34)*cr*0.94;
-      const a=k*2.399;
-      core.push({x:fx+Math.cos(a)*r,y:fy+Math.sin(a)*r});
-    }
-    ctx.globalAlpha=0.35;
-    ctx.fillStyle='#4a1f08';
-    ctx.beginPath(); ctx.arc(fx,fy,cr*0.7,0,TAU); ctx.fill();
-    ctx.globalAlpha=1;
-    drawWeb(core,7,0.55,Math.max(grow*0.4,open));
-
-    return {x:fx,y:fy,open:open};
+    return {x:x, y:y+h*0.32};
   }
 
   function drawParticles(wind){
@@ -461,15 +288,15 @@
     drawSky(t);
     drawField(p,t);
     drawRidges(p,t);
-    const flower = drawBloom(p,t);
+    const figure = drawWarrior(p,t);
 
     const release = ss(0.72,0.9,p);
-    if(!seedSpawned && release>0.02 && flower){
-      spawnSeeds(flower.x,flower.y,52,1);
+    if(!seedSpawned && release>0.02 && figure){
+      spawnSeeds(figure.x,figure.y,52,1);
       seedSpawned = true;
     }
-    if(pointer.impulse>0.55 && flower && !pointer._burst){
-      spawnSeeds(flower.x,flower.y,34,0.9);
+    if(pointer.impulse>0.55 && figure && !pointer._burst){
+      spawnSeeds(figure.x,figure.y,34,0.9);
       pointer._burst = true;
     }
     if(pointer.impulse<0.2) pointer._burst = false;
@@ -509,8 +336,8 @@
     <p>Cloud bands, a low sun glow, and a slow field of stars pass overhead.</p>
   </div>
   <div class="box">
-    <h3>The bloom</h3>
-    <p>Stem, leaves and three rings of petals are woven from dense node-and-edge lattices — roughly five times the connectivity of the surrounding field for the space they occupy.</p>
+    <h3>The warrior</h3>
+    <p>An ancient Roman legionary emerges with a gladius raised and a scutum shield, rendered as a self-contained illustration layered into the scene.</p>
   </div>
   <div class="box">
     <h3>Seed drift</h3>
