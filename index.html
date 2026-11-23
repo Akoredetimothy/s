@@ -579,6 +579,43 @@ body.route-quotes footer{padding:var(--space-2) 0;}
 }
 .quotes-tab:hover,.quotes-tab.active{border-color:var(--color-accent);color:var(--color-accent);}
 
+/* ---------- BLOOM STAGE ---------- */
+.bloom-stage{margin-bottom:var(--space-5);}
+.bloom-stage__frame{position:relative;border:1px solid var(--color-border);background:#050b18;overflow:hidden;}
+.bloom-stage__frame canvas{display:block;width:100%;height:auto;cursor:crosshair;}
+.bloom-stage__overlay{
+  position:absolute;top:var(--space-3);left:var(--space-3);
+  display:flex;align-items:baseline;gap:10px;pointer-events:none;
+}
+.bloom-stage__index{
+  font-family:var(--font-mono);font-size:1.6rem;line-height:1;color:var(--color-accent);
+}
+.bloom-stage__label{
+  font-family:var(--font-mono);font-size:.64rem;letter-spacing:3px;
+  text-transform:uppercase;color:rgba(255,255,255,.72);
+}
+.bloom-stage__bar{
+  display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);
+  flex-wrap:wrap;border-top:1px solid var(--color-border);padding:var(--space-2) 0;
+}
+.bloom-steps{display:flex;gap:var(--space-3);flex-wrap:wrap;}
+.bloom-steps span{
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--color-text-faint);transition:color var(--t-fast);
+}
+.bloom-steps span.active{color:var(--color-accent);}
+.bloom-stage__actions{display:flex;gap:8px;}
+.bloom-stage__actions button{
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;
+  background:none;border:1px solid var(--color-border);color:var(--color-text-dim);
+  padding:5px 10px;cursor:pointer;transition:border-color var(--t-fast),color var(--t-fast);
+}
+.bloom-stage__actions button:hover{border-color:var(--color-accent);color:var(--color-accent);}
+.bloom-stage__hint{
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--color-text-faint);margin:0;
+}
+
 /* ---------- GAME ARCADE BOX ---------- */
 .game-box{
   background:#131313 !important;

@@ -2,14 +2,24 @@
 
 > A living field: points resolve into a mountain ridge, sky drifts overhead, and a bloom unfurls to scatter its seeds into the wind. Move across the canvas to lean the flower; click to release a fresh burst.
 
-<div class="game-box">
-  <div class="game-hud">
-    <div>PHASE: <b id="graphPhase">FIELD</b></div>
-    <div>FPS: <b id="graphFps">60</b></div>
-    <div>SEEDS: <b id="graphSeeds">000</b></div>
+<div class="bloom-stage">
+  <div class="bloom-stage__frame">
+    <canvas id="graphCanvas" width="1000" height="560"></canvas>
+    <div class="bloom-stage__overlay">
+      <span class="bloom-stage__index" id="bloomIndex">01</span>
+      <span class="bloom-stage__label" id="bloomLabel">Point field</span>
+    </div>
   </div>
-  <canvas id="graphCanvas" width="1000" height="520" class="game-canvas"></canvas>
-  <p class="game-hint">Move to lean the bloom &middot; click to scatter seeds</p>
+  <div class="bloom-stage__bar">
+    <div class="bloom-steps">
+      <span class="active">Field</span><span>Ridge</span><span>Bloom</span><span>Release</span><span>Drift</span>
+    </div>
+    <div class="bloom-stage__actions">
+      <button type="button" id="bloomPause">Pause</button>
+      <button type="button" id="bloomReset">Restart</button>
+    </div>
+  </div>
+  <p class="bloom-stage__hint">Move across the scene to lean the bloom &middot; click to scatter seeds</p>
 </div>
 
 <script>
@@ -17,7 +27,7 @@
   const canvas = document.getElementById('graphCanvas');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
-  const W = 1000, H = 520;
+  const W = 1000, H = 560;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   canvas.width = W*dpr; canvas.height = H*dpr;
   ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -27,11 +37,31 @@
   const ss = (a,b,x)=>{ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); };
   const hash = n=>{ const x=Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); };
 
-  const phaseEl = document.getElementById('graphPhase');
-  const fpsEl = document.getElementById('graphFps');
-  const seedsEl = document.getElementById('graphSeeds');
+  const indexEl = document.getElementById('bloomIndex');
+  const labelEl = document.getElementById('bloomLabel');
+  const steps = Array.from(document.querySelectorAll('.bloom-steps span'));
+  const pauseBtn = document.getElementById('bloomPause');
+  const resetBtn = document.getElementById('bloomReset');
   const pointer = { x:W/2, y:H/2, active:false, down:false, impulse:0 };
+  const PHASES = [
+    { at:0,    name:'Point field' },
+    { at:0.16, name:'Mountain ridge' },
+    { at:0.38, name:'The bloom' },
+    { at:0.6,  name:'Petal opening' },
+    { at:0.72, name:'Seed dispersal' }
+  ];
   let particles = [], seedSpawned = false, lastCycle = -1;
+  let simTime = 0, paused = false, stepIndex = -1;
+
+  if(pauseBtn) pauseBtn.addEventListener('click', ()=>{
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+  });
+  if(resetBtn) resetBtn.addEventListener('click', ()=>{
+    simTime = 0; particles = []; seedSpawned = false; lastCycle = -1;
+    paused = false;
+    if(pauseBtn) pauseBtn.textContent = 'Pause';
+  });
 
   function setPointer(e){
     const r = canvas.getBoundingClientRect();
@@ -333,17 +363,18 @@
     }
   }
 
-  let last = performance.now(), frames = 0, seedCount = 0;
+  let last = performance.now(), lastFps = performance.now(), frames = 0;
   function draw(now){
     requestAnimationFrame(draw);
-    const t = now/1000;
+    const dt = Math.min((now-last)/1000,0.05);
+    last = now;
+    if(!paused) simTime += dt;
+    const t = simTime;
     const cycle = Math.floor(t/CYCLE);
     const p = (t%CYCLE)/CYCLE;
     if(cycle!==lastCycle){
       lastCycle = cycle; particles = []; seedSpawned = false;
     }
-    const dt = Math.min((now-last)/1000,0.05);
-    last = now;
     pointer.impulse *= 0.94;
     const wind = Math.sin(t*0.5)*18;
 
@@ -373,17 +404,15 @@
       ctx.globalAlpha=1;
     }
 
-    const phase = p<0.16?'FIELD':p<0.38?'RIDGE':p<0.6?'BLOOM':p<0.72?'OPEN':p<0.94?'DISPERSE':'RESET';
-    if(phaseEl && phaseEl.textContent!==phase) phaseEl.textContent=phase;
-    seedCount = particles.filter(q=>!q.dust).length;
-    if(seedsEl) seedsEl.textContent=String(seedCount).padStart(3,'0');
-    frames++;
-    if(fpsEl && now-lastFps>1000){
-      fpsEl.textContent=Math.round(frames*1000/(now-lastFps));
-      frames=0; lastFps=now;
+    let idx = 0;
+    for(let i=0;i<PHASES.length;i++) if(p>=PHASES[i].at) idx=i;
+    if(idx!==stepIndex){
+      stepIndex = idx;
+      if(indexEl) indexEl.textContent = String(idx+1).padStart(2,'0');
+      if(labelEl) labelEl.textContent = PHASES[idx].name;
+      steps.forEach((s,i)=>s.classList.toggle('active', i===idx));
     }
   }
-  let lastFps = performance.now();
   requestAnimationFrame(draw);
 })();
 </script>
