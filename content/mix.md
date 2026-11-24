@@ -20,7 +20,7 @@
 <div class="box" style="text-align:center;">
   <span class="eyebrow">WEB AUDIO SEQUENCE</span>
   <h3>The Brass Motif</h3>
-  <p>A low synthesized horn, sub bass, a repeating arpeggio and noise pulses — an electronic reworking of the familiar Inception-style swell, built only from oscillators.</p>
+  <p>The trailer's low horn call — B♭, F, D♭, B♭ — rebuilt from saturated oscillators, sub-bass impacts, breath noise, a rising tension sweep and a synthetic hall reverb.</p>
   <div style="display:flex; gap:12px; justify-content:center; margin-top:16px; flex-wrap:wrap;">
     <button class="btn btn--accent" onclick="playInception()">Play Sequence</button>
     <button class="btn" onclick="stopInception()">Stop</button>
@@ -52,71 +52,120 @@ function playArpeggio() {
   });
 }
 
-if(window.__incTimer){ clearInterval(window.__incTimer); window.__incTimer = null; }
+if(window.__incTimer){ clearInterval(window.__incTimer); window.__incTimer=null; }
 if(!window.__incHashBound){
   window.__incHashBound = true;
   window.addEventListener('hashchange', ()=>{ if(window.__incTimer) stopInception(); });
 }
 
-function incOut(node){
-  node.connect(window.__incMaster);
-  if(window.__incDelay) node.connect(window.__incDelay);
+function incImpulse(ctx, seconds, decay){
+  const rate = ctx.sampleRate, len = Math.floor(rate*seconds);
+  const buf = ctx.createBuffer(2,len,rate);
+  for(let c=0;c<2;c++){
+    const d = buf.getChannelData(c);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);
+  }
+  return buf;
 }
 
-function incHorn(ctx, freq, time, dur, amt){
+function incCurve(amount){
+  const n = 1024, curve = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const x = i*2/n-1;
+    curve[i] = Math.tanh(x*amount);
+  }
+  return curve;
+}
+
+function incSend(node){
+  node.connect(window.__incMaster);
+  if(window.__incVerb) node.connect(window.__incVerb);
+}
+
+function incBreath(ctx,time,amt){
+  const len = Math.floor(ctx.sampleRate*0.3);
+  const buf = ctx.createBuffer(1,len,ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+  const src = ctx.createBufferSource(); src.buffer=buf;
+  const f = ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=900; f.Q.value=0.6;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001,time);
+  g.gain.exponentialRampToValueAtTime(amt,time+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001,time+0.26);
+  src.connect(f); f.connect(g); incSend(g);
+  src.start(time);
+}
+
+function incBrass(ctx,freq,time,dur,amt){
+  const shaper = ctx.createWaveShaper();
+  shaper.curve = incCurve(3.2);
+  shaper.oversample = '4x';
+
   const filt = ctx.createBiquadFilter();
   filt.type = 'lowpass';
-  filt.Q.value = 3;
-  filt.frequency.setValueAtTime(240, time);
-  filt.frequency.exponentialRampToValueAtTime(1650, time+0.14);
-  filt.frequency.exponentialRampToValueAtTime(420, time+dur);
+  filt.Q.value = 1.4;
+  filt.frequency.setValueAtTime(170,time);
+  filt.frequency.exponentialRampToValueAtTime(1500,time+0.16);
+  filt.frequency.exponentialRampToValueAtTime(520,time+dur*0.72);
+  filt.frequency.exponentialRampToValueAtTime(160,time+dur);
+
   const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001, time);
-  g.gain.exponentialRampToValueAtTime(amt, time+0.11);
-  g.gain.setValueAtTime(amt, time+dur*0.62);
-  g.gain.exponentialRampToValueAtTime(0.0001, time+dur);
-  [-9,0,9].forEach(d=>{
+  g.gain.setValueAtTime(0.0001,time);
+  g.gain.exponentialRampToValueAtTime(amt,time+0.075);
+  g.gain.setValueAtTime(amt*0.86,time+dur*0.55);
+  g.gain.exponentialRampToValueAtTime(0.0001,time+dur);
+
+  const mix = ctx.createGain(); mix.gain.value=0.42;
+  [-11,0,11,6].forEach((det,i)=>{
     const o = ctx.createOscillator();
-    o.type = 'sawtooth';
-    o.frequency.setValueAtTime(freq, time);
-    o.detune.value = d;
-    o.connect(filt);
-    o.start(time); o.stop(time+dur+0.05);
+    o.type = i%2 ? 'sawtooth' : 'square';
+    o.frequency.setValueAtTime(freq*0.93,time);
+    o.frequency.exponentialRampToValueAtTime(freq,time+0.075);
+    o.detune.value = det;
+    o.connect(mix);
+    o.start(time); o.stop(time+dur+0.06);
+    if(i===0) o.onended = ()=>{ try{ mix.disconnect(); shaper.disconnect(); filt.disconnect(); g.disconnect(); }catch(e){} };
   });
-  filt.connect(g); incOut(g);
+  mix.connect(shaper); shaper.connect(filt); filt.connect(g); incSend(g);
+  incBreath(ctx,time,0.035);
 }
 
-function incSub(ctx, freq, time, dur){
+function incSub(ctx,freq,time,dur){
   const o = ctx.createOscillator(); o.type='sine'; o.frequency.value=freq;
   const g = ctx.createGain();
   g.gain.setValueAtTime(0.0001,time);
-  g.gain.exponentialRampToValueAtTime(0.26,time+0.04);
+  g.gain.exponentialRampToValueAtTime(0.3,time+0.05);
   g.gain.exponentialRampToValueAtTime(0.0001,time+dur);
-  o.connect(g); incOut(g);
+  o.connect(g); incSend(g);
   o.start(time); o.stop(time+dur+0.05);
 }
 
-function incPluck(ctx, freq, time, dur){
-  const o = ctx.createOscillator(); o.type='triangle'; o.frequency.value=freq;
-  const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.value=freq*2;
+function incBoom(ctx,time,amt){
+  const o = ctx.createOscillator(); o.type='sine';
+  o.frequency.setValueAtTime(130,time);
+  o.frequency.exponentialRampToValueAtTime(34,time+0.5);
   const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001,time);
-  g.gain.exponentialRampToValueAtTime(0.085,time+0.012);
-  g.gain.exponentialRampToValueAtTime(0.0001,time+dur);
-  o.connect(g); o2.connect(g); incOut(g);
-  o.start(time); o2.start(time);
-  o.stop(time+dur+0.02); o2.stop(time+dur+0.02);
+  g.gain.setValueAtTime(amt,time);
+  g.gain.exponentialRampToValueAtTime(0.0001,time+0.62);
+  o.connect(g); incSend(g);
+  o.start(time); o.stop(time+0.66);
 }
 
-function incNoise(ctx, time, amount){
-  const len = Math.floor(ctx.sampleRate*0.22);
+function incRiser(ctx,time,dur){
+  const len = Math.floor(ctx.sampleRate*dur);
   const buf = ctx.createBuffer(1,len,ctx.sampleRate);
-  const data = buf.getChannelData(0);
-  for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
   const src = ctx.createBufferSource(); src.buffer=buf;
-  const f = ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1400; f.Q.value=0.7;
-  const g = ctx.createGain(); g.gain.value=amount;
-  src.connect(f); f.connect(g); incOut(g);
+  const f = ctx.createBiquadFilter(); f.type='bandpass'; f.Q.value=1.4;
+  f.frequency.setValueAtTime(260,time);
+  f.frequency.exponentialRampToValueAtTime(5200,time+dur);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001,time);
+  g.gain.exponentialRampToValueAtTime(0.1,time+dur*0.92);
+  g.gain.exponentialRampToValueAtTime(0.0001,time+dur);
+  src.connect(f); f.connect(g); incSend(g);
   src.start(time);
 }
 
@@ -128,39 +177,39 @@ function playInception(){
 
     const master = ctx.createGain();
     master.gain.setValueAtTime(0.0001,ctx.currentTime);
-    master.gain.exponentialRampToValueAtTime(0.6,ctx.currentTime+0.9);
+    master.gain.exponentialRampToValueAtTime(0.72,ctx.currentTime+0.7);
     const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value=-16; comp.ratio.value=4;
     master.connect(comp); comp.connect(ctx.destination);
     window.__incMaster = master;
 
-    const delay = ctx.createDelay(1); delay.delayTime.value=0.31;
-    const fb = ctx.createGain(); fb.gain.value=0.3;
-    const wet = ctx.createGain(); wet.gain.value=0.22;
-    delay.connect(fb); fb.connect(delay); delay.connect(wet); wet.connect(master);
-    window.__incDelay = delay;
+    const verb = ctx.createGain(); verb.gain.value=0.5;
+    const conv = ctx.createConvolver(); conv.buffer=incImpulse(ctx,3.4,2.6);
+    verb.connect(conv); conv.connect(master);
+    window.__incVerb = verb;
 
-    const hornSeq = [
-      {s:0, f:58.27, d:1.5}, {s:3, f:87.31, d:1.0}, {s:5, f:69.30, d:1.0},
-      {s:8, f:58.27, d:1.6}, {s:11,f:87.31, d:1.0}, {s:13,f:69.30, d:1.2}
+    const motif = [
+      {t:0.0, f:58.27, d:1.85},
+      {t:1.95,f:87.31, d:0.95},
+      {t:2.98,f:69.30, d:0.95},
+      {t:4.02,f:58.27, d:2.35}
     ];
-    const arp = [233.08, 277.18, 349.23, 466.16, 349.23, 277.18, 233.08, 311.13];
-    const beat = 60/84/2;
-    let step = 0;
-    let next = ctx.currentTime+0.12;
+    const CYCLE = 7.7;
+    let start = ctx.currentTime+0.15;
 
     function schedule(){
-      while(next < ctx.currentTime+0.4){
-        const s = step%16;
-        for(const h of hornSeq) if(h.s===s) incHorn(ctx,h.f,next,h.d,0.16);
-        if(s===0 || s===8) incSub(ctx,29.14,next,1.2);
-        if(s%2===0) incPluck(ctx,arp[(s/2)%arp.length],next,beat*1.8);
-        if(s===0 || s===6 || s===8 || s===14) incNoise(ctx,next,0.045);
-        next += beat;
-        step++;
+      while(start < ctx.currentTime+0.6){
+        for(const n of motif){
+          incBrass(ctx,n.f,start+n.t,n.d,0.19);
+          incSub(ctx,n.f/2,start+n.t,n.d*0.92);
+          incBoom(ctx,start+n.t,0.3);
+        }
+        incRiser(ctx,start+6.45,1.15);
+        start += CYCLE;
       }
     }
     schedule();
-    window.__incTimer = setInterval(schedule,70);
+    window.__incTimer = setInterval(schedule,90);
     const st = document.getElementById('incStatus');
     if(st) st.textContent='PLAYING';
   }catch(e){
@@ -176,7 +225,7 @@ function stopInception(){
     const g = window.__incMaster.gain;
     g.cancelScheduledValues(ctx.currentTime);
     g.setValueAtTime(Math.max(g.value,0.0001),ctx.currentTime);
-    g.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.45);
+    g.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.5);
   }
   const st = document.getElementById('incStatus');
   if(st) st.textContent='READY';
@@ -186,5 +235,5 @@ function stopInception(){
 ## Sandbox Highlights
 
 - **Web Audio API** synth built zero-dependency using native browser APIs
-- **Oscillator-based brass motif** with synthesized sub bass, arpeggio and filtered noise pulses
+- **Saturated brass engine** with waveshaping, pitch scoops, sub hits and generated convolution reverb
 - **Markdown Driven Routing** without any heavy npm build tools
