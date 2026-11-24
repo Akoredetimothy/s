@@ -9,7 +9,7 @@
   <div class="about-body">
     <p class="lead"><strong>Researching the engineering fundamentals for the next Kardashev climb</strong> — building mechanical, visual and intelligent systems that draw on both old, nature-inspired biological substrates and new ones rooted in distinct technology stacks.</p>
     <p>My work covers object-centric state representation with slot attention, self-supervised world models, efficient multimodal training through distillation and KV-cache compression, and visual grounding for computer-use agents.</p>
-    <p>Currently: Independent ML Researcher at <em>Sage Engineering Lab</em> and Multimodal LM Quality Analyst at <em>Turing Work</em>. B.Eng. Mechanical Engineering, <em>Olabisi Onabanjo University</em> — Second Class Upper, top 5% of graduating class. See the <a href="#cv">CV</a> for the full record.</p>
+    <p>B.Eng. Mechanical Engineering, <em>Olabisi Onabanjo University</em> — Second Class Upper, top 5% of graduating class. See the <a href="#cv">CV</a> for the full record.</p>
     <div class="contact-strip">
       <a class="btn btn--email" href="mailto:adetola11korede@proton.me"><svg><use href="#i-mail"/></svg> Email</a>
       <a class="btn btn--accent" href="#scholar">Scholar</a>
